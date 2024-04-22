@@ -20,11 +20,11 @@ public record Roll(Face dice1, Face dice2, Face dice3, Face dice4, Face dice5){
         return toStream().map(Face::intValue).filter(it -> it == face.intValue()).reduce(0, Integer::sum);
     }
 
-    public Set<Face> facesOccurring(int times){
+    public Set<Face> facesOccurringAtLeast(int times){
         return countFaceOccurrences()
             .entrySet()
             .stream()
-            .filter(entry -> times == entry.getValue())
+            .filter(entry -> times <= entry.getValue())
             .map(Map.Entry::getKey)
             .collect(Collectors.toSet());
     }

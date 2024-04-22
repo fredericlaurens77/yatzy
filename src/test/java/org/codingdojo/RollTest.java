@@ -55,6 +55,6 @@ class RollTest {
     @ParameterizedTest
     @MethodSource
     void should_return_the_faces_with_specific_numbers_of_occurrences(Roll roll, int occurrences, Set<Face> facesFound){
-        assertEquals(facesFound, roll.facesOccurring(occurrences));
+        assertEquals(facesFound, roll.facesOccurringAtLeast(occurrences));
     }
 }

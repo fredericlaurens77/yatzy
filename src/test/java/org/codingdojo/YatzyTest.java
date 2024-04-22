@@ -76,18 +76,18 @@ public class YatzyTest {
 
     @Test
     public void one_pair_score_should_be_zero_when_there_is_no_pair(){
-        assertEquals(0, Yatzy.ScorePair(1,2,3,4,5));
+        assertEquals(0, Yatzy.ScorePair(new Roll(ONE,TWO,THREE,FOUR,FIVE)));
     }
 
     @Test
     public void one_pair_score_should_be_the_sum_of_highest_pair() {
-        assertEquals(6, Yatzy.ScorePair(3,4,3,5,6));
-        assertEquals(10, Yatzy.ScorePair(5,3,3,3,5));
-        assertEquals(12, Yatzy.ScorePair(5,3,6,6,5));
-        assertEquals(8, Yatzy.ScorePair(3,3,3,4,4));
-        assertEquals(12, Yatzy.ScorePair(1,1,6,2,6));
-        assertEquals(6, Yatzy.ScorePair(3,3,3,4,1));
-        assertEquals(6, Yatzy.ScorePair(3,3,3,3,1));
+        assertEquals(6, Yatzy.ScorePair(new Roll(THREE,FOUR,THREE,FIVE,SIX)));
+        assertEquals(10, Yatzy.ScorePair(new Roll(FIVE,THREE,THREE,THREE,FIVE)));
+        assertEquals(12, Yatzy.ScorePair(new Roll(FIVE,THREE,SIX,SIX,FIVE)));
+        assertEquals(8, Yatzy.ScorePair(new Roll(THREE,THREE,THREE,FOUR,FOUR)));
+        assertEquals(12, Yatzy.ScorePair(new Roll(ONE,ONE,SIX,TWO,SIX)));
+        assertEquals(6, Yatzy.ScorePair(new Roll(THREE,THREE,THREE,FOUR,ONE)));
+        assertEquals(6, Yatzy.ScorePair(new Roll(THREE,THREE,THREE,THREE,ONE)));
     }
 
     @Test

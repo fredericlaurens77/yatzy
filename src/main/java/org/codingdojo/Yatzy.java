@@ -1,5 +1,7 @@
 package org.codingdojo;
 
+import java.util.Set;
+
 import static org.codingdojo.Face.*;
 
 public class Yatzy {
@@ -10,7 +12,7 @@ public class Yatzy {
     }
 
     public static int scoreYatzy(Roll roll) {
-        if (roll.facesOccurring(5).isEmpty()) {
+        if (roll.facesOccurringAtLeast(5).isEmpty()) {
             return 0;
         }
         return 50;
@@ -43,19 +45,15 @@ public class Yatzy {
         return roll.sumOfAll(SIX);
     }
 
-    public static int ScorePair(int d1, int d2, int d3, int d4, int d5)
+    public static int ScorePair(Roll roll)
     {
-        int[] counts = new int[6];
-        counts[d1-1]++;
-        counts[d2-1]++;
-        counts[d3-1]++;
-        counts[d4-1]++;
-        counts[d5-1]++;
-        int at;
-        for (at = 0; at != 6; at++)
-            if (counts[6-at-1] >= 2)
-                return (6-at)*2;
-        return 0;
+        Set<Face> facesFound = roll.facesOccurringAtLeast(2);
+        if(facesFound.isEmpty()){
+            return 0;
+        }
+
+        int highestPair = facesFound.stream().mapToInt(Face::intValue).max().getAsInt();
+        return highestPair*2;
     }
 
     public static int ScoreTwoPairs(int d1, int d2, int d3, int d4, int d5)
