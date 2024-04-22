@@ -1,7 +1,6 @@
 package org.codingdojo;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static org.codingdojo.Face.*;
 
@@ -66,33 +65,21 @@ public class Yatzy {
         return facesFound.stream().map(Face::intValue).reduce(0, Integer::sum)*2;
     }
 
-    public static int ScoreFourOfAKind(int d1, int d2, int d3, int d4, int d5)
+    public static int ScoreFourOfAKind(Roll roll)
     {
-        int[] tallies;
-        tallies = new int[6];
-        tallies[d1-1]++;
-        tallies[d2-1]++;
-        tallies[d3-1]++;
-        tallies[d4-1]++;
-        tallies[d5-1]++;
-        for (int i = 0; i < 6; i++)
-            if (tallies[i] >= 4)
-                return (i+1) * 4;
+        Set<Face> facesFound = roll.facesOccurringAtLeast(4);
+        if(facesFound.stream().findFirst().isPresent()){
+            return facesFound.stream().findFirst().get().intValue()*4;
+        }
         return 0;
     }
 
-    public static int ScoreThreeOfAKind(int d1, int d2, int d3, int d4, int d5)
+    public static int ScoreThreeOfAKind(Roll roll)
     {
-        int[] t;
-        t = new int[6];
-        t[d1-1]++;
-        t[d2-1]++;
-        t[d3-1]++;
-        t[d4-1]++;
-        t[d5-1]++;
-        for (int i = 0; i < 6; i++)
-            if (t[i] >= 3)
-                return (i+1) * 3;
+        Set<Face> facesFound = roll.facesOccurringAtLeast(3);
+        if(facesFound.stream().findFirst().isPresent()){
+            return facesFound.stream().findFirst().get().intValue()*3;
+        }
         return 0;
     }
 

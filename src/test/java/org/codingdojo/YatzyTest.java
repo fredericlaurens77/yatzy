@@ -114,38 +114,38 @@ public class YatzyTest {
 
     @Test
     public void three_of_a_kind_score_should_be_zero() {
-        assertEquals(0, Yatzy.ScoreThreeOfAKind(3,3,4,5,6));
+        assertEquals(0, Yatzy.ScoreThreeOfAKind(new Roll(THREE,THREE,FOUR,FIVE,SIX)));
     }
 
     @Test
     public void three_of_a_kind_score_should_be_the_sum() {
-        assertEquals(9, Yatzy.ScoreThreeOfAKind(3,3,3,4,5));
-        assertEquals(15, Yatzy.ScoreThreeOfAKind(5,3,5,4,5));
+        assertEquals(9, Yatzy.ScoreThreeOfAKind(new Roll(THREE,THREE,THREE,FOUR,FIVE)));
+        assertEquals(15, Yatzy.ScoreThreeOfAKind(new Roll(FIVE,THREE,FIVE,FOUR,FIVE)));
     }
     @Test
     public void three_of_a_kind_score_should_ignore_a_fourth_occurrence() {
-        assertEquals(9, Yatzy.ScoreThreeOfAKind(3, 3, 3, 3, 1));
+        assertEquals(9, Yatzy.ScoreThreeOfAKind(new Roll(THREE,THREE,THREE,THREE,ONE)));
     }
 
     @Test
     public void three_of_a_kind_score_should_ignore_a_fourth_and_fifth_occurrence() {
-        assertEquals(9, Yatzy.ScoreThreeOfAKind(3,3,3,3,3));
+        assertEquals(9, Yatzy.ScoreThreeOfAKind(new Roll(THREE,THREE,THREE,THREE,THREE)));
     }
 
     @Test
     public void four_of_a_kind_score_should_be_zero() {
-        assertEquals(0, Yatzy.ScoreFourOfAKind(2,2,2,5,5));
+        assertEquals(0, Yatzy.ScoreFourOfAKind(new Roll(TWO,TWO,TWO,FIVE,FIVE)));
     }
 
     @Test
     public void four_of_a_kind_score_should_be_the_sum() {
-        assertEquals(12, Yatzy.ScoreFourOfAKind(3,3,3,3,5));
-        assertEquals(20, Yatzy.ScoreFourOfAKind(5,5,5,4,5));
+        assertEquals(12, Yatzy.ScoreFourOfAKind(new Roll(THREE,THREE,THREE,THREE,FIVE)));
+        assertEquals(20, Yatzy.ScoreFourOfAKind(new Roll(FIVE,FIVE,FIVE,FOUR,FIVE)));
     }
 
     @Test
     public void four_of_a_kind_score_should_ignore_a_fifth_occurrence() {
-        assertEquals(8, Yatzy.ScoreFourOfAKind(2,2,2,2,2));
+        assertEquals(8, Yatzy.ScoreFourOfAKind(new Roll(TWO,TWO,TWO,TWO,TWO)));
     }
 
     @Test
