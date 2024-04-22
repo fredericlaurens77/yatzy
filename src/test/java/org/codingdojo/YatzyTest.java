@@ -160,7 +160,7 @@ public class YatzyTest {
 
     @Test
     public void small_straight_should_score_0_when_not_a_small_straight() {
-        assertEquals(0, Yatzy.scoreSmallStraight(new Roll(ONE, TWO, TWO, FOUR, FIVE)));
+        assertEquals(0, Yatzy.scoreSmallStraight(new Roll(ONE, TWO, SIX, FOUR, FIVE)));
     }
 
     @Test

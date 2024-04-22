@@ -18,7 +18,8 @@ public record Roll(Face dice1, Face dice2, Face dice3, Face dice4, Face dice5) {
     }
 
     public boolean isStraight() {
-        return findFacesOccurringAtLeast(1).size() == 5;
+        return findFacesOccurringAtLeast(1).size() == 5
+            && (fullRoll().sumFaces() == 15 || fullRoll().sumFaces() == 20);
     }
 
     public boolean doesNotHaveThreeOfAKind(){
