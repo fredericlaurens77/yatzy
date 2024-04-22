@@ -9,16 +9,11 @@ public class Yatzy {
         return roll.sum();
     }
 
-    public static int scoreYatzy(int d1, int d2, int d3, int d4, int d5)
-    {
-        int[] dice = makeDice(d1,d2,d3,d4,d5);
-        int[] counts = new int[6];
-        for (int die : dice)
-            counts[die-1]++;
-        for (int i = 0; i != 6; i++)
-            if (counts[i] == 5)
-                return 50;
-        return 0;
+    public static int scoreYatzy(Roll roll) {
+        if (roll.facesOccurring(5).isEmpty()) {
+            return 0;
+        }
+        return 50;
     }
 
     public static int ScoreOnes(Roll roll) {
@@ -185,16 +180,6 @@ public class Yatzy {
             return _2_at * 2 + _3_at * 3;
         else
             return 0;
-    }
-
-    private static int[] makeDice(int d1, int d2, int d3, int d4, int d5){
-        int[] dice = new int[5];
-        dice[0] = d1;
-        dice[1] = d2;
-        dice[2] = d3;
-        dice[3] = d4;
-        dice[4] = d5;
-        return dice;
     }
 
 }

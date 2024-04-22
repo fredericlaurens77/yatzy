@@ -17,16 +17,16 @@ public class YatzyTest {
 
     @Test
     public void yatzy_score_should_be_50() {
-        assertEquals(50, Yatzy.scoreYatzy(4,4,4,4,4));
-        assertEquals(50, Yatzy.scoreYatzy(6,6,6,6,6));
-        assertEquals(50, Yatzy.scoreYatzy(1,1,1,1,1));
+        assertEquals(50, Yatzy.scoreYatzy(new Roll(FOUR,FOUR,FOUR,FOUR,FOUR)));
+        assertEquals(50, Yatzy.scoreYatzy(new Roll(SIX,SIX,SIX,SIX,SIX)));
+        assertEquals(50, Yatzy.scoreYatzy(new Roll(ONE,ONE,ONE,ONE,ONE)));
 
     }
 
     @Test
     public void yatzy_score_should_be_0_when_not_a_yatzy() {
-        assertEquals(0, Yatzy.scoreYatzy(6,6,6,6,3));
-        assertEquals(0, Yatzy.scoreYatzy(1,1,1,2,1));
+        assertEquals(0, Yatzy.scoreYatzy(new Roll(SIX,SIX,SIX,SIX,THREE)));
+        assertEquals(0, Yatzy.scoreYatzy(new Roll(ONE,ONE,ONE,TWO,ONE)));
     }
 
 
