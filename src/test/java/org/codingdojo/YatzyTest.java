@@ -92,24 +92,24 @@ public class YatzyTest {
 
     @Test
     public void two_pair_score_should_be_zero_when_there_is_only_one_pair() {
-        assertEquals(0, Yatzy.ScoreTwoPairs(1,1,2,3,4));
+        assertEquals(0, Yatzy.ScoreTwoPairs(new Roll(ONE,ONE,TWO,THREE,FOUR)));
     }
 
     @Test
     public void two_pair_score_should_be_zero_when_it_is_a_four_of_a_kind() {
-        assertEquals(0, Yatzy.ScoreTwoPairs(3,3,3,3,1));
+        assertEquals(0, Yatzy.ScoreTwoPairs(new Roll(THREE,THREE,THREE,THREE,ONE)));
     }
 
     @Test
     public void two_pair_score_should_be_the_sum_of_the_two_pairs() {
-        assertEquals(16, Yatzy.ScoreTwoPairs(3,3,5,4,5));
-        assertEquals(8, Yatzy.ScoreTwoPairs(1,1,2,3,3));
+        assertEquals(16, Yatzy.ScoreTwoPairs(new Roll(THREE,THREE,FIVE,FOUR,FIVE)));
+        assertEquals(8, Yatzy.ScoreTwoPairs(new Roll(ONE,ONE,TWO,THREE,THREE)));
     }
 
     @Test
     public void two_pair_score_should_be_ignore_a_third_occurrence() {
-        assertEquals(16, Yatzy.ScoreTwoPairs(3,3,5,5,5));
-        assertEquals(6, Yatzy.ScoreTwoPairs(1,1,2,2,2));
+        assertEquals(16, Yatzy.ScoreTwoPairs(new Roll(THREE,THREE,FIVE,FIVE,FIVE)));
+        assertEquals(6, Yatzy.ScoreTwoPairs(new Roll(ONE,ONE,TWO,TWO,TWO)));
     }
 
     @Test

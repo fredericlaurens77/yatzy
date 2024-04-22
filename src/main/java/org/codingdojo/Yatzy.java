@@ -1,6 +1,7 @@
 package org.codingdojo;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.codingdojo.Face.*;
 
@@ -56,25 +57,13 @@ public class Yatzy {
         return highestPair*2;
     }
 
-    public static int ScoreTwoPairs(int d1, int d2, int d3, int d4, int d5)
+    public static int ScoreTwoPairs(Roll roll)
     {
-        int[] counts = new int[6];
-        counts[d1-1]++;
-        counts[d2-1]++;
-        counts[d3-1]++;
-        counts[d4-1]++;
-        counts[d5-1]++;
-        int n = 0;
-        int score = 0;
-        for (int i = 0; i < 6; i += 1)
-            if (counts[6-i-1] >= 2) {
-                n++;
-                score += (6-i);
-            }
-        if (n == 2)
-            return score * 2;
-        else
+        Set<Face> facesFound = roll.facesOccurringAtLeast(2);
+        if(facesFound.size() != 2){
             return 0;
+        }
+        return facesFound.stream().map(Face::intValue).reduce(0, Integer::sum)*2;
     }
 
     public static int ScoreFourOfAKind(int d1, int d2, int d3, int d4, int d5)
