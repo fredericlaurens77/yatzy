@@ -83,77 +83,37 @@ public class Yatzy {
         return 0;
     }
 
-    public static int scoreSmallStraight(int d1, int d2, int d3, int d4, int d5)
+    public static int scoreSmallStraight(Roll roll)
     {
-        int[] tallies;
-        tallies = new int[6];
-        tallies[d1-1] += 1;
-        tallies[d2-1] += 1;
-        tallies[d3-1] += 1;
-        tallies[d4-1] += 1;
-        tallies[d5-1] += 1;
-        if (tallies[0] == 1 &&
-                tallies[1] == 1 &&
-                tallies[2] == 1 &&
-                tallies[3] == 1 &&
-                tallies[4] == 1)
-            return 15;
-        return 0;
-    }
-
-    public static int scoreLargeStraight(int d1, int d2, int d3, int d4, int d5)
-    {
-        int[] tallies;
-        tallies = new int[6];
-        tallies[d1-1] += 1;
-        tallies[d2-1] += 1;
-        tallies[d3-1] += 1;
-        tallies[d4-1] += 1;
-        tallies[d5-1] += 1;
-        if (tallies[1] == 1 &&
-                tallies[2] == 1 &&
-                tallies[3] == 1 &&
-                tallies[4] == 1
-                && tallies[5] == 1)
-            return 20;
-        return 0;
-    }
-
-    public static int scoreFullHouse(int d1, int d2, int d3, int d4, int d5)
-    {
-        int[] tallies;
-        boolean _2 = false;
-        int i;
-        int _2_at = 0;
-        boolean _3 = false;
-        int _3_at = 0;
-
-
-
-
-        tallies = new int[6];
-        tallies[d1-1] += 1;
-        tallies[d2-1] += 1;
-        tallies[d3-1] += 1;
-        tallies[d4-1] += 1;
-        tallies[d5-1] += 1;
-
-        for (i = 0; i != 6; i += 1)
-            if (tallies[i] == 2) {
-                _2 = true;
-                _2_at = i+1;
-            }
-
-        for (i = 0; i != 6; i += 1)
-            if (tallies[i] == 3) {
-                _3 = true;
-                _3_at = i+1;
-            }
-
-        if (_2 && _3)
-            return _2_at * 2 + _3_at * 3;
-        else
+        if(roll.facesOccurringAtLeast(1).size() != 5){
             return 0;
+        }
+
+        return roll.sum();
     }
 
+    public static int scoreLargeStraight(Roll roll)
+    {
+        if(roll.facesOccurringAtLeast(1).size() != 5){
+            return 0;
+        }
+
+        return roll.sum();
+    }
+
+    public static int scoreFullHouse(Roll roll) {
+        int score;
+        Set<Face> facesFound = roll.facesOccurringAtLeast(3);
+        if(facesFound.stream().findFirst().isEmpty()){
+            return 0;
+        } else {
+            score = facesFound.stream().findFirst().get().intValue();
+        }
+        facesFound = roll.facesOccurringAtLeast(2);
+        if(roll.facesOccurringAtLeast(2).size() != 2){
+            return 0;
+        } else {
+            return score + facesFound.stream().map(Face::intValue).reduce(0, Integer::sum)*2;
+        }
+    }
 }

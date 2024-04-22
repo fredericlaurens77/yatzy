@@ -150,44 +150,44 @@ public class YatzyTest {
 
     @Test
     public void small_straight_should_score_15_in_order() {
-        assertEquals(15, Yatzy.scoreSmallStraight(1,2,3,4,5));
+        assertEquals(15, Yatzy.scoreSmallStraight(new Roll(ONE,TWO,THREE,FOUR,FIVE)));
     }
 
     @Test
     public void small_straight_should_score_15_in_disorder() {
-        assertEquals(15, Yatzy.scoreSmallStraight(2,3,4,5,1));
+        assertEquals(15, Yatzy.scoreSmallStraight(new Roll(TWO,THREE,FOUR,FIVE,ONE)));
     }
 
     @Test
     public void small_straight_should_score_0_when_not_a_small_straight() {
-        assertEquals(0, Yatzy.scoreSmallStraight(1,2,2,4,5));
+        assertEquals(0, Yatzy.scoreSmallStraight(new Roll(ONE,TWO,TWO,FOUR,FIVE)));
     }
 
     @Test
     public void large_straight_should_score_20_in_order() {
-        assertEquals(20, Yatzy.scoreLargeStraight(2,3,4,5,6));
+        assertEquals(20, Yatzy.scoreLargeStraight(new Roll(TWO,THREE,FOUR,FIVE,SIX)));
     }
 
     @Test
     public void large_straight_should_score_20_in_disorder() {
-        assertEquals(20, Yatzy.scoreLargeStraight(6,2,3,4,5));
+        assertEquals(20, Yatzy.scoreLargeStraight(new Roll(SIX,TWO,THREE,FOUR,FIVE)));
     }
 
     @Test
     public void large_straight_should_score_0_when_not_a_large_straight() {
-        assertEquals(0, Yatzy.scoreLargeStraight(1,2,2,4,5));
+        assertEquals(0, Yatzy.scoreLargeStraight(new Roll(ONE,TWO,TWO,FOUR,FIVE)));
     }
 
     @Test
     public void full_house_should_score_sum_of_two_groups() {
-        assertEquals(18, Yatzy.scoreFullHouse(6,2,2,2,6));
-        assertEquals(8, Yatzy.scoreFullHouse(1,1,2,2,2));
+        assertEquals(18, Yatzy.scoreFullHouse(new Roll(SIX,TWO,TWO,TWO,SIX)));
+        assertEquals(8, Yatzy.scoreFullHouse(new Roll(ONE,ONE,TWO,TWO,TWO)));
     }
 
     @Test
     public void full_house_should_score_0_when_not_a_full_house() {
-        assertEquals(0, Yatzy.scoreFullHouse(2,3,4,5,6));
-        assertEquals(0,Yatzy.scoreFullHouse(2,2,3,3,4));
-        assertEquals(0,Yatzy.scoreFullHouse(4,4,4,4,4));
+        assertEquals(0, Yatzy.scoreFullHouse(new Roll(TWO,THREE,FOUR,FIVE,SIX)));
+        assertEquals(0,Yatzy.scoreFullHouse(new Roll(TWO,TWO,THREE,THREE,FOUR)));
+        assertEquals(0,Yatzy.scoreFullHouse(new Roll(FOUR,FOUR,FOUR,FOUR,FOUR)));
     }
 }
