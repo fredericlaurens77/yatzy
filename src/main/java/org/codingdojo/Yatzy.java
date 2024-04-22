@@ -1,5 +1,7 @@
 package org.codingdojo;
 
+import static org.codingdojo.Face.*;
+
 public class Yatzy {
 
     public static int scoreChance(Roll roll)
@@ -19,76 +21,31 @@ public class Yatzy {
         return 0;
     }
 
-    public static int ScoreOnes(int d1, int d2, int d3, int d4, int d5) {
-        int sum = 0;
-        if (d1 == 1) sum++;
-        if (d2 == 1) sum++;
-        if (d3 == 1) sum++;
-        if (d4 == 1) sum++;
-        if (d5 == 1)
-            sum++;
-
-        return sum;
+    public static int ScoreOnes(Roll roll) {
+        return roll.sumOfAll(ONE);
     }
 
-    public static int ScoreTwos(int d1, int d2, int d3, int d4, int d5) {
-        int sum = 0;
-        if (d1 == 2) sum += 2;
-        if (d2 == 2) sum += 2;
-        if (d3 == 2) sum += 2;
-        if (d4 == 2) sum += 2;
-        if (d5 == 2) sum += 2;
-        return sum;
+    public static int ScoreTwos(Roll roll) {
+        return roll.sumOfAll(TWO);
     }
 
-    public static int ScoreThrees(int d1, int d2, int d3, int d4, int d5) {
-        int s;
-        s = 0;
-        if (d1 == 3) s += 3;
-        if (d2 == 3) s += 3;
-        if (d3 == 3) s += 3;
-        if (d4 == 3) s += 3;
-        if (d5 == 3) s += 3;
-        return s;
+    public static int ScoreThrees(Roll roll) {
+        return roll.sumOfAll(THREE);
     }
 
-    public static int ScoreFours(int d1, int d2, int d3, int d4, int d5)
+    public static int ScoreFours(Roll roll)
     {
-        int[] dice = new int[5];
-        dice[0] = d1;
-        dice[1] = d2;
-        dice[2] = d3;
-        dice[3] = d4;
-        dice[4] = d5;
-        int sum;
-        sum = 0;
-        for (int at = 0; at != 5; at++) {
-            if (dice[at] == 4) {
-                sum += 4;
-            }
-        }
-        return sum;
+        return roll.sumOfAll(FOUR);
     }
 
-    public static int ScoreFives(int d1, int d2, int d3, int d4, int d5)
+    public static int ScoreFives(Roll roll)
     {
-        int[] dice = makeDice(d1,d2,d3,d4,d5);
-        int s = 0;
-        int i;
-        for (i = 0; i < dice.length; i++)
-            if (dice[i] == 5)
-                s = s + 5;
-        return s;
+        return roll.sumOfAll(FIVE);
     }
 
-    public static int ScoreSixes(int d1, int d2, int d3, int d4, int d5)
+    public static int ScoreSixes(Roll roll)
     {
-        int[] dice = makeDice(d1,d2,d3,d4,d5);
-        int sum = 0;
-        for (int at = 0; at < dice.length; at++)
-            if (dice[at] == 6)
-                sum = sum + 6;
-        return sum;
+        return roll.sumOfAll(SIX);
     }
 
     public static int ScorePair(int d1, int d2, int d3, int d4, int d5)

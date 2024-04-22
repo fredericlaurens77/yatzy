@@ -32,46 +32,46 @@ public class YatzyTest {
 
 
     @Test public void ones_score_should_be_the_sum_of_ones() {
-        assertEquals(1, Yatzy.ScoreOnes(1,2,3,4,5));
-        assertEquals(2, Yatzy.ScoreOnes(1,2,1,4,5));
-        assertEquals(0, Yatzy.ScoreOnes(6,2,2,4,5));
-        assertEquals(4, Yatzy.ScoreOnes(1,2,1,1,1));
-        assertEquals(0, Yatzy.ScoreOnes(3,3,3,4,5));
+        assertEquals(1, Yatzy.ScoreOnes(new Roll(ONE,TWO,THREE,FOUR,FIVE)));
+        assertEquals(2, Yatzy.ScoreOnes(new Roll(ONE,TWO,ONE,FOUR,FIVE)));
+        assertEquals(0, Yatzy.ScoreOnes(new Roll(SIX,TWO,TWO,FOUR,FIVE)));
+        assertEquals(4, Yatzy.ScoreOnes(new Roll(ONE,TWO,ONE,ONE,ONE)));
+        assertEquals(0, Yatzy.ScoreOnes(new Roll(THREE,THREE,THREE,FOUR,FIVE)));
     }
 
     @Test
     public void twos_score_should_be_the_sum_of_twos() {
-        assertEquals(4, Yatzy.ScoreTwos(1,2,3,2,6));
-        assertEquals(10, Yatzy.ScoreTwos(2,2,2,2,2));
-        assertEquals(4, Yatzy.ScoreTwos(2,3,2,5,1));
+        assertEquals(4, Yatzy.ScoreTwos(new Roll(ONE,TWO,THREE,TWO,SIX)));
+        assertEquals(10, Yatzy.ScoreTwos(new Roll(TWO,TWO,TWO,TWO,TWO)));
+        assertEquals(4, Yatzy.ScoreTwos(new Roll(TWO,THREE,TWO,FIVE,ONE)));
     }
 
     @Test
     public void threes_score_should_be_the_sum_of_threes() {
-        assertEquals(6, Yatzy.ScoreThrees(1,2,3,2,3));
-        assertEquals(12, Yatzy.ScoreThrees(2,3,3,3,3));
+        assertEquals(6, Yatzy.ScoreThrees(new Roll(ONE,TWO,THREE,TWO,THREE)));
+        assertEquals(12, Yatzy.ScoreThrees(new Roll(TWO,THREE,THREE,THREE,THREE)));
     }
 
     @Test
     public void fours_score_should_be_the_sum_of_fours() {
-        assertEquals(12, Yatzy.ScoreFours(4,4,4,5,5));
-        assertEquals(8, Yatzy.ScoreFours(4,4,5,5,5));
-        assertEquals(4, Yatzy.ScoreFours(4,5,5,5,5));
-        assertEquals(8, Yatzy.ScoreFours(1,1,2,4,4));
+        assertEquals(12, Yatzy.ScoreFours(new Roll(FOUR,FOUR,FOUR,FIVE,FIVE)));
+        assertEquals(8, Yatzy.ScoreFours(new Roll(FOUR,FOUR,FIVE,FIVE,FIVE)));
+        assertEquals(4, Yatzy.ScoreFours(new Roll(FOUR,FIVE,FIVE,FIVE,FIVE)));
+        assertEquals(8, Yatzy.ScoreFours(new Roll(ONE,ONE,TWO,FOUR,FOUR)));
     }
 
     @Test
     public void fives_score_should_be_the_sum_of_fives() {
-        assertEquals(10, Yatzy.ScoreFives(4,4,4,5,5));
-        assertEquals(15, Yatzy.ScoreFives(4,4,5,5,5));
-        assertEquals(20, Yatzy.ScoreFives(4,5,5,5,5));
+        assertEquals(10, Yatzy.ScoreFives(new Roll(FOUR,FOUR,FOUR,FIVE,FIVE)));
+        assertEquals(15, Yatzy.ScoreFives(new Roll(FOUR,FOUR,FIVE,FIVE,FIVE)));
+        assertEquals(20, Yatzy.ScoreFives(new Roll(FOUR,FIVE,FIVE,FIVE,FIVE)));
     }
 
     @Test
     public void sixes_score_should_be_the_sum_of_sixes() {
-        assertEquals(0, Yatzy.ScoreSixes(4,4,4,5,5));
-        assertEquals(6, Yatzy.ScoreSixes(4,4,6,5,5));
-        assertEquals(18, Yatzy.ScoreSixes(6,5,6,6,5));
+        assertEquals(0, Yatzy.ScoreSixes(new Roll(FOUR,FOUR,FOUR,FIVE,FIVE)));
+        assertEquals(6, Yatzy.ScoreSixes(new Roll(FOUR,FOUR,SIX,FIVE,FIVE)));
+        assertEquals(18, Yatzy.ScoreSixes(new Roll(SIX,FIVE,SIX,SIX,FIVE)));
     }
 
     @Test

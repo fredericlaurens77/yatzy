@@ -11,4 +11,8 @@ public record Roll(Face dice1, Face dice2, Face dice3, Face dice4, Face dice5){
     public int sum(){
         return toStream().reduce(0, Integer::sum);
     }
+
+    public int sumOfAll(Face face){
+        return toStream().filter(it -> it == face.intValue()).reduce(0, Integer::sum);
+    }
 }
