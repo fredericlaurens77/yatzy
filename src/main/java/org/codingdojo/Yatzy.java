@@ -2,15 +2,9 @@ package org.codingdojo;
 
 public class Yatzy {
 
-    public static int scoreChance(int d1, int d2, int d3, int d4, int d5)
+    public static int scoreChance(Roll roll)
     {
-        int total = 0;
-        total += d1;
-        total += d2;
-        total += d3;
-        total += d4;
-        total += d5;
-        return total;
+        return roll.sum();
     }
 
     public static int scoreYatzy(int d1, int d2, int d3, int d4, int d5)

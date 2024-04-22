@@ -8,10 +8,10 @@ public class YatzyTest {
 
     @Test
     public void chance_score_should_be_the_sum_of_all_dice() {
-        assertEquals(15, Yatzy.scoreChance(2,3,4,5,1));
-        assertEquals(16, Yatzy.scoreChance(3,3,4,5,1));
-        assertEquals(14, Yatzy.scoreChance(1,1,3,3,6));
-        assertEquals(21, Yatzy.scoreChance(4,5,5,6,1));
+        assertEquals(15, Yatzy.scoreChance(new Roll(2,3,4,5,1)));
+        assertEquals(16, Yatzy.scoreChance(new Roll(3,3,4,5,1)));
+        assertEquals(14, Yatzy.scoreChance(new Roll(1,1,3,3,6)));
+        assertEquals(21, Yatzy.scoreChance(new Roll(4,5,5,6,1)));
     }
 
     @Test
