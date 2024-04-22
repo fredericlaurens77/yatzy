@@ -9,7 +9,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import static org.codingdojo.Face.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RollTest {
 
@@ -42,19 +42,19 @@ class RollTest {
 
     @ParameterizedTest
     @MethodSource
-    void should_return_the_sum(Roll roll, int sum){
+    void should_return_the_sum(Roll roll, int sum) {
         assertEquals(sum, roll.sum());
     }
 
     @ParameterizedTest
     @MethodSource
-    void should_return_the_sum_of_specific_face_values(Roll roll, Face value, int sum){
+    void should_return_the_sum_of_specific_face_values(Roll roll, Face value, int sum) {
         assertEquals(sum, roll.sumOfAll(value));
     }
 
     @ParameterizedTest
     @MethodSource
-    void should_return_the_faces_with_specific_numbers_of_occurrences(Roll roll, int occurrences, Set<Face> facesFound){
+    void should_return_the_faces_with_specific_numbers_of_occurrences(Roll roll, int occurrences, Set<Face> facesFound) {
         assertEquals(facesFound, roll.facesOccurringAtLeast(occurrences));
     }
 }

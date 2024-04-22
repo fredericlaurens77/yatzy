@@ -6,8 +6,7 @@ import static org.codingdojo.Face.*;
 
 public class Yatzy {
 
-    public static int scoreChance(Roll roll)
-    {
+    public static int scoreChance(Roll roll) {
         return roll.sum();
     }
 
@@ -30,71 +29,62 @@ public class Yatzy {
         return roll.sumOfAll(THREE);
     }
 
-    public static int ScoreFours(Roll roll)
-    {
+    public static int ScoreFours(Roll roll) {
         return roll.sumOfAll(FOUR);
     }
 
-    public static int ScoreFives(Roll roll)
-    {
+    public static int ScoreFives(Roll roll) {
         return roll.sumOfAll(FIVE);
     }
 
-    public static int ScoreSixes(Roll roll)
-    {
+    public static int ScoreSixes(Roll roll) {
         return roll.sumOfAll(SIX);
     }
 
-    public static int ScorePair(Roll roll)
-    {
+    public static int ScorePair(Roll roll) {
         Set<Face> facesFound = roll.facesOccurringAtLeast(2);
-        if(facesFound.isEmpty()){
+        if (facesFound.isEmpty()) {
             return 0;
         }
 
         int highestPair = facesFound.stream().mapToInt(Face::intValue).max().getAsInt();
-        return highestPair*2;
+        return highestPair * 2;
     }
 
-    public static int ScoreTwoPairs(Roll roll)
-    {
+    public static int ScoreTwoPairs(Roll roll) {
         Set<Face> facesFound = roll.facesOccurringAtLeast(2);
-        if(facesFound.size() != 2){
+        if (facesFound.size() != 2) {
             return 0;
         }
-        return facesFound.stream().map(Face::intValue).reduce(0, Integer::sum)*2;
+        return facesFound.stream().map(Face::intValue).reduce(0, Integer::sum) * 2;
     }
 
-    public static int ScoreFourOfAKind(Roll roll)
-    {
+    public static int ScoreFourOfAKind(Roll roll) {
         Set<Face> facesFound = roll.facesOccurringAtLeast(4);
-        if(facesFound.stream().findFirst().isPresent()){
-            return facesFound.stream().findFirst().get().intValue()*4;
+        if (facesFound.stream().findFirst().isPresent()) {
+            return facesFound.stream().findFirst().get().intValue() * 4;
         }
         return 0;
     }
 
-    public static int ScoreThreeOfAKind(Roll roll)
-    {
+    public static int ScoreThreeOfAKind(Roll roll) {
         Set<Face> facesFound = roll.facesOccurringAtLeast(3);
-        if(facesFound.stream().findFirst().isPresent()){
-            return facesFound.stream().findFirst().get().intValue()*3;
+        if (facesFound.stream().findFirst().isPresent()) {
+            return facesFound.stream().findFirst().get().intValue() * 3;
         }
         return 0;
     }
 
-    public static int scoreSmallStraight(Roll roll)
-    {
-        if(roll.facesOccurringAtLeast(1).size() != 5){
+    public static int scoreSmallStraight(Roll roll) {
+        if (roll.facesOccurringAtLeast(1).size() != 5) {
             return 0;
         }
 
         return roll.sum();
     }
 
-    public static int scoreLargeStraight(Roll roll)
-    {
-        if(roll.facesOccurringAtLeast(1).size() != 5){
+    public static int scoreLargeStraight(Roll roll) {
+        if (roll.facesOccurringAtLeast(1).size() != 5) {
             return 0;
         }
 
@@ -104,16 +94,16 @@ public class Yatzy {
     public static int scoreFullHouse(Roll roll) {
         int score;
         Set<Face> facesFound = roll.facesOccurringAtLeast(3);
-        if(facesFound.stream().findFirst().isEmpty()){
+        if (facesFound.stream().findFirst().isEmpty()) {
             return 0;
         } else {
             score = facesFound.stream().findFirst().get().intValue();
         }
         facesFound = roll.facesOccurringAtLeast(2);
-        if(roll.facesOccurringAtLeast(2).size() != 2){
+        if (roll.facesOccurringAtLeast(2).size() != 2) {
             return 0;
         } else {
-            return score + facesFound.stream().map(Face::intValue).reduce(0, Integer::sum)*2;
+            return score + facesFound.stream().map(Face::intValue).reduce(0, Integer::sum) * 2;
         }
     }
 }

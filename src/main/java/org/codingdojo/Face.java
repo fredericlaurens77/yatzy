@@ -14,7 +14,7 @@ public enum Face {
         this.value = value;
     }
 
-    public int intValue(){
+    public int intValue() {
         return value;
     }
 }
