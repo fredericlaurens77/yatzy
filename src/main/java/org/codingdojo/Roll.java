@@ -1,23 +1,33 @@
 package org.codingdojo;
 
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public record Roll(Face dice1, Face dice2, Face dice3, Face dice4, Face dice5) {
 
-    private Stream<Face> toStream() {
+    public Stream<Face> fullRoll() {
         return Stream.of(dice1, dice2, dice3, dice4, dice5);
     }
+    public Stream<Face> rollOf(Face face){ return fullRoll().filter(it -> it == face); }
 
-    public int sum() {
-        return toStream().map(Face::intValue).reduce(0, Integer::sum);
+    public boolean isStraight(){
+        return facesOccurringAtLeast(1).size() == 5;
     }
 
-    public int sumOfAll(Face face) {
-        return toStream().map(Face::intValue).filter(it -> it == face.intValue()).reduce(0, Integer::sum);
+    public boolean isYatzy(){
+        return facesOccurringAtLeast(5).size() == 1;
+    }
+
+    public Set<Face> pairs(){
+        return facesOccurringAtLeast(2);
+    }
+
+    public Optional<Face> highestPair(){
+        return pairs()
+            .stream()
+            .max(Comparator.comparing(Face::intValue));
     }
 
     public Set<Face> facesOccurringAtLeast(int times) {
@@ -30,7 +40,7 @@ public record Roll(Face dice1, Face dice2, Face dice3, Face dice4, Face dice5) {
     }
 
     private Map<Face, Long> countFaceOccurrences() {
-        return toStream()
+        return fullRoll()
             .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
     }
 }
