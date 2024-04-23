@@ -92,7 +92,7 @@ public class Yatzy {
     }
 
     public static int scoreFullHouse(Roll roll) {
-        if(!roll.facesOccurringAtLeast(3).stream().findFirst().isPresent()){
+        if(roll.facesOccurringAtLeast(3).stream().findFirst().isEmpty()){
             return 0;
         }
         if(roll.facesOccurringAtLeast(2).size() != 2){
