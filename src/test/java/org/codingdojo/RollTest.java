@@ -4,7 +4,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import static org.codingdojo.Face.*;
@@ -26,7 +28,7 @@ class RollTest {
             Arguments.of(new Roll(ONE, ONE, ONE, ONE, ONE), ONE, Stream.of(ONE, ONE, ONE, ONE, ONE)),
             Arguments.of(new Roll(ONE, TWO, THREE, FOUR, FIVE), FOUR, Stream.of(FOUR)),
             Arguments.of(new Roll(FIVE, SIX, ONE, FIVE, FIVE), FIVE, Stream.of(FIVE, FIVE, FIVE)),
-            Arguments.of(new Roll(FOUR, ONE, TWO, THREE, TWO), TWO, Stream.of(TWO,TWO))
+            Arguments.of(new Roll(FOUR, ONE, TWO, THREE, TWO), TWO, Stream.of(TWO, TWO))
         );
     }
 
@@ -81,7 +83,7 @@ class RollTest {
 
     @ParameterizedTest
     @MethodSource
-    void should_return_the_roll_filtered_for_specific_face_values(Roll roll, Face value, Stream<Face> filteredRoll){
+    void should_return_the_roll_filtered_for_specific_face_values(Roll roll, Face value, Stream<Face> filteredRoll) {
         assertEquals(filteredRoll.toList(), roll.rollOf(value).toList());
     }
 
@@ -93,25 +95,25 @@ class RollTest {
 
     @ParameterizedTest
     @MethodSource
-    void should_identify_straights(Roll roll, boolean isStraight){
+    void should_identify_straights(Roll roll, boolean isStraight) {
         assertEquals(isStraight, roll.isStraight());
     }
 
     @ParameterizedTest
     @MethodSource
-    void should_identify_yatzys(Roll roll, boolean isYatzy){
+    void should_identify_yatzys(Roll roll, boolean isYatzy) {
         assertEquals(isYatzy, roll.isYatzy());
     }
 
     @ParameterizedTest
     @MethodSource
-    void should_find_all_pairs(Roll roll, Set<Face> pairs){
+    void should_find_all_pairs(Roll roll, Set<Face> pairs) {
         assertEquals(pairs, roll.pairs());
     }
 
     @ParameterizedTest
     @MethodSource
-    void should_find_highest_pair(Roll roll, Face highestPair){
+    void should_find_highest_pair(Roll roll, Face highestPair) {
         assertEquals(Optional.ofNullable(highestPair), roll.highestPair());
     }
 }

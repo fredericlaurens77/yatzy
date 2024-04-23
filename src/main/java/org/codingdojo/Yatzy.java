@@ -7,6 +7,8 @@ import static org.codingdojo.Face.*;
 
 public class Yatzy {
 
+    private static final int NULL_SCORE = 0;
+
     private static int sum(Stream<Face> roll) {
         return roll.map(Face::intValue).reduce(0, Integer::sum);
     }
@@ -15,27 +17,27 @@ public class Yatzy {
         return sum(roll.fullRoll());
     }
 
-    public static int ScoreOnes(Roll roll) {
+    public static int scoreOnes(Roll roll) {
         return sum(roll.rollOf(ONE));
     }
 
-    public static int ScoreTwos(Roll roll) {
+    public static int scoreTwos(Roll roll) {
         return sum(roll.rollOf(TWO));
     }
 
-    public static int ScoreThrees(Roll roll) {
+    public static int scoreThrees(Roll roll) {
         return sum(roll.rollOf(THREE));
     }
 
-    public static int ScoreFours(Roll roll) {
+    public static int scoreFours(Roll roll) {
         return sum(roll.rollOf(FOUR));
     }
 
-    public static int ScoreFives(Roll roll) {
+    public static int scoreFives(Roll roll) {
         return sum(roll.rollOf(FIVE));
     }
 
-    public static int ScoreSixes(Roll roll) {
+    public static int scoreSixes(Roll roll) {
         return sum(roll.rollOf(SIX));
     }
 
@@ -48,43 +50,43 @@ public class Yatzy {
     }
 
     private static int scoreStraight(Roll roll) {
-        if(roll.isStraight()){
+        if (roll.isStraight()) {
             return sum(roll.fullRoll());
         }
-        return 0;
+        return NULL_SCORE;
     }
 
     public static int scoreYatzy(Roll roll) {
         if (roll.isYatzy()) {
             return 50;
         }
-        return 0;
+        return NULL_SCORE;
     }
 
-    public static int ScorePair(Roll roll) {
+    public static int scorePair(Roll roll) {
         if (roll.pairs().isEmpty()) {
-            return 0;
+            return NULL_SCORE;
         }
         return roll.highestPair()
             .stream()
             .findFirst()
             .map(it -> it.intValue() * 2)
-            .orElse(0);
+            .orElse(NULL_SCORE);
     }
 
-    public static int ScoreTwoPairs(Roll roll) {
+    public static int scoreTwoPairs(Roll roll) {
         Set<Face> pairs = roll.pairs();
         if (pairs.size() != 2) {
-            return 0;
+            return NULL_SCORE;
         }
         return sum(pairs.stream()) * 2;
     }
 
-    public static int ScoreFourOfAKind(Roll roll) {
+    public static int scoreFourOfAKind(Roll roll) {
         return findGroupOfAGivenNumberOfOccurrencesAndSum(roll, 4);
     }
 
-    public static int ScoreThreeOfAKind(Roll roll) {
+    public static int scoreThreeOfAKind(Roll roll) {
         return findGroupOfAGivenNumberOfOccurrencesAndSum(roll, 3);
     }
 
@@ -93,17 +95,18 @@ public class Yatzy {
         return facesFound.stream()
             .findFirst()
             .map(face -> face.intValue() * times)
-            .orElse(0);
+            .orElse(NULL_SCORE);
     }
 
     public static int scoreFullHouse(Roll roll) {
-        if (roll.facesOccurringAtLeast(3).stream().findFirst().isEmpty()) {
-            return 0;
+        if (roll.facesOccurringAtLeast(3).isEmpty()) {
+            return NULL_SCORE;
         }
-        if (roll.facesOccurringAtLeast(2).size() != 2) {
-            return 0;
+        int twoPairScore = scoreTwoPairs(roll);
+        if (twoPairScore == NULL_SCORE) {
+            return NULL_SCORE;
         }
-
-        return roll.facesOccurringAtLeast(3).stream().findFirst().get().intValue() + roll.facesOccurringAtLeast(2).stream().map(Face::intValue).reduce(0, Integer::sum) * 2;
+        return twoPairScore +
+            roll.facesOccurringAtLeast(3).stream().findFirst().map(Face::intValue).orElse(NULL_SCORE);
     }
 }
