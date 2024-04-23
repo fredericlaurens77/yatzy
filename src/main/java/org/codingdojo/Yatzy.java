@@ -60,30 +60,30 @@ public class Yatzy {
     }
 
     public static int ScoreFourOfAKind(Roll roll) {
-        Set<Face> facesFound = roll.facesOccurringAtLeast(4);
-        if (facesFound.stream().findFirst().isPresent()) {
-            return facesFound.stream().findFirst().get().intValue() * 4;
-        }
-        return 0;
+        return findGroupOfAGivenNumberOfOccurrencesAndSum(roll, 4);
     }
 
     public static int ScoreThreeOfAKind(Roll roll) {
-        Set<Face> facesFound = roll.facesOccurringAtLeast(3);
+        return findGroupOfAGivenNumberOfOccurrencesAndSum(roll, 3);
+    }
+
+    private static int findGroupOfAGivenNumberOfOccurrencesAndSum(Roll roll, int times) {
+        Set<Face> facesFound = roll.facesOccurringAtLeast(times);
         if (facesFound.stream().findFirst().isPresent()) {
-            return facesFound.stream().findFirst().get().intValue() * 3;
+            return facesFound.stream().findFirst().get().intValue() * times;
         }
         return 0;
     }
 
     public static int scoreSmallStraight(Roll roll) {
-        if (roll.facesOccurringAtLeast(1).size() != 5) {
-            return 0;
-        }
-
-        return roll.sum();
+        return scoreStraight(roll);
     }
 
     public static int scoreLargeStraight(Roll roll) {
+        return scoreStraight(roll);
+    }
+
+    private static int scoreStraight(Roll roll) {
         if (roll.facesOccurringAtLeast(1).size() != 5) {
             return 0;
         }
@@ -92,18 +92,14 @@ public class Yatzy {
     }
 
     public static int scoreFullHouse(Roll roll) {
-        int score;
-        Set<Face> facesFound = roll.facesOccurringAtLeast(3);
-        if (facesFound.stream().findFirst().isEmpty()) {
+        if(!roll.facesOccurringAtLeast(3).stream().findFirst().isPresent()){
             return 0;
-        } else {
-            score = facesFound.stream().findFirst().get().intValue();
         }
-        facesFound = roll.facesOccurringAtLeast(2);
-        if (roll.facesOccurringAtLeast(2).size() != 2) {
+        if(roll.facesOccurringAtLeast(2).size() != 2){
             return 0;
-        } else {
-            return score + facesFound.stream().map(Face::intValue).reduce(0, Integer::sum) * 2;
         }
+
+        return roll.facesOccurringAtLeast(3).stream().findFirst().get().intValue()
+            + roll.facesOccurringAtLeast(2).stream().map(Face::intValue).reduce(0, Integer::sum) * 2;
     }
 }
