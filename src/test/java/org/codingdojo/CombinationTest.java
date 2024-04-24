@@ -10,7 +10,7 @@ import static org.codingdojo.Face.ONE;
 import static org.codingdojo.Face.SIX;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ScorerTest {
+public class CombinationTest {
 
     public static Stream<Arguments> should_sum_faces_with_multiplying_factor() {
         return Stream.of(
@@ -29,12 +29,12 @@ public class ScorerTest {
     @ParameterizedTest
     @MethodSource
     void should_sum_faces(Roll roll, int sum) {
-        assertEquals(sum, Scorer.sumFaces(roll.fullRoll()));
+        assertEquals(sum, roll.fullRoll().sumFaces());
     }
 
     @ParameterizedTest
     @MethodSource
     void should_sum_faces_with_multiplying_factor(Roll roll, int times, int sum) {
-        assertEquals(sum, Scorer.sumFacesWithMultiplier(roll.fullRoll(), times));
+        assertEquals(sum, roll.fullRoll().sumFacesWithMultiplier(times));
     }
 }

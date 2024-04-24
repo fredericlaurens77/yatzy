@@ -2,7 +2,6 @@ package org.codingdojo;
 
 import java.util.Comparator;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -10,12 +9,12 @@ import java.util.stream.Stream;
 
 public record Roll(Face dice1, Face dice2, Face dice3, Face dice4, Face dice5) {
 
-    public Stream<Face> fullRoll() {
-        return Stream.of(dice1, dice2, dice3, dice4, dice5);
+    public Combination fullRoll() {
+        return new Combination(Stream.of(dice1, dice2, dice3, dice4, dice5));
     }
 
-    public Stream<Face> filteredRollForOnly(Face face) {
-        return fullRoll().filter(it -> it == face);
+    public Combination filteredRollForOnly(Face face) {
+        return new Combination(Stream.of(dice1, dice2, dice3, dice4, dice5).filter(it -> it == face));
     }
 
     public boolean isStraight() {
@@ -26,29 +25,37 @@ public record Roll(Face dice1, Face dice2, Face dice3, Face dice4, Face dice5) {
         return findFacesOccurringAtLeast(3).isEmpty();
     }
 
+    public boolean doesNotHaveAPair(){
+        return findFacesOccurringAtLeast(2).isEmpty();
+    }
+
+    public boolean doesNotHaveTwoPairs(){
+        return findFacesOccurringAtLeast(2).size() != 2;
+    }
+
     public boolean isYatzy() {
         return findFacesOccurringAtLeast(5).size() == 1;
     }
 
-    public Set<Face> findPairs() {
-        return findFacesOccurringAtLeast(2);
+    public Combination findPairs() {
+        return new Combination(findFacesOccurringAtLeast(2).stream());
     }
 
-    public Set<Face> findThreeOfAKind(){
-        return findFacesOccurringAtLeast(3);
+    public Combination findThreeOfAKind(){
+        return new Combination(findFacesOccurringAtLeast(3).stream());
     }
 
-    public Set<Face> findFourOfAKind(){
-        return findFacesOccurringAtLeast(4);
+    public Combination findFourOfAKind(){
+        return new Combination(findFacesOccurringAtLeast(4).stream());
     }
 
-    public Optional<Face> findHighestPair() {
-        return findPairs()
-            .stream()
-            .max(Comparator.comparing(Face::intValue));
+    public Combination findHighestPair() {
+        return new Combination(findPairs()
+            .combination()
+            .max(Comparator.comparing(Face::intValue)).stream());
     }
 
-    public Set<Face> findFacesOccurringAtLeast(int times) {
+    private Set<Face> findFacesOccurringAtLeast(int times) {
         return countFaceOccurrences()
             .entrySet()
             .stream()
@@ -58,7 +65,7 @@ public record Roll(Face dice1, Face dice2, Face dice3, Face dice4, Face dice5) {
     }
 
     private Map<Face, Long> countFaceOccurrences() {
-        return fullRoll()
+        return Stream.of(dice1, dice2, dice3, dice4, dice5)
             .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
     }
 }

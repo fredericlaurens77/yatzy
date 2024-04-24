@@ -7,6 +7,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.codingdojo.Face.*;
@@ -32,21 +33,12 @@ class RollTest {
         );
     }
 
-    public static Stream<Arguments> should_return_the_faces_with_specific_numbers_of_occurrences() {
-        return Stream.of(
-            Arguments.of(new Roll(ONE, ONE, ONE, ONE, ONE), 5, Set.of(ONE)),
-            Arguments.of(new Roll(TWO, TWO, THREE, FOUR, FOUR), 2, Set.of(TWO, FOUR)),
-            Arguments.of(new Roll(FIVE, SIX, ONE, FIVE, FIVE), 3, Set.of(FIVE)),
-            Arguments.of(new Roll(FOUR, ONE, TWO, THREE, TWO), 3, Collections.EMPTY_SET)
-        );
-    }
-
     public static Stream<Arguments> should_find_highest_pair() {
         return Stream.of(
-            Arguments.of(new Roll(ONE, TWO, ONE, ONE, ONE), ONE),
-            Arguments.of(new Roll(ONE, TWO, ONE, TWO, ONE), TWO),
-            Arguments.of(new Roll(FIVE, SIX, ONE, FIVE, ONE), FIVE),
-            Arguments.of(new Roll(ONE, TWO, FOUR, SIX, FIVE), null)
+            Arguments.of(new Roll(ONE, TWO, ONE, ONE, ONE), Set.of(ONE)),
+            Arguments.of(new Roll(ONE, TWO, ONE, TWO, ONE),Set.of(TWO)),
+            Arguments.of(new Roll(FIVE, SIX, ONE, FIVE, ONE), Set.of(FIVE)),
+            Arguments.of(new Roll(ONE, TWO, FOUR, SIX, FIVE), Collections.EMPTY_SET)
         );
     }
 
@@ -75,22 +67,51 @@ class RollTest {
         );
     }
 
+    public static Stream<Arguments> should_identify_two_pairs() {
+        return Stream.of(
+            Arguments.of(new Roll(ONE, ONE, ONE, ONE, ONE), false),
+            Arguments.of(new Roll(ONE, SIX, ONE, SIX, ONE), true)
+        );
+    }
+
+    public static Stream<Arguments> should_find_three_of_a_kind() {
+        return Stream.of(
+            Arguments.of(new Roll(ONE, FOUR, FIVE, ONE, SIX), Collections.EMPTY_SET),
+            Arguments.of(new Roll(ONE, SIX, ONE, SIX, ONE), Set.of(ONE))
+        );
+    }
+
+    public static Stream<Arguments> should_find_four_of_a_kind() {
+        return Stream.of(
+            Arguments.of(new Roll(ONE, ONE, ONE, FOUR, ONE), Set.of(ONE)),
+            Arguments.of(new Roll(ONE, SIX, ONE, SIX, ONE), Collections.EMPTY_SET)
+        );
+    }
+
+    public static Stream<Arguments> should_identify_a_pair() {
+        return Stream.of(
+            Arguments.of(new Roll(ONE, TWO, THREE, FOUR, SIX), false),
+            Arguments.of(new Roll(ONE, SIX, ONE, SIX, ONE), true)
+        );
+    }
+
+    public static Stream<Arguments> should_identify_three_of_a_kind() {
+        return Stream.of(
+            Arguments.of(new Roll(ONE, FOUR, FIVE, ONE, SIX), false),
+            Arguments.of(new Roll(ONE, SIX, ONE, SIX, ONE), true)
+        );
+    }
+
     @ParameterizedTest
     @MethodSource
     void should_return_the_full_roll(Roll roll, Stream<Face> fullRoll) {
-        assertEquals(fullRoll.toList(), roll.fullRoll().toList());
+        assertEquals(fullRoll.toList(), roll.fullRoll().combination().toList());
     }
 
     @ParameterizedTest
     @MethodSource
     void should_return_the_roll_filtered_for_specific_face_values(Roll roll, Face value, Stream<Face> filteredRoll) {
-        assertEquals(filteredRoll.toList(), roll.filteredRollForOnly(value).toList());
-    }
-
-    @ParameterizedTest
-    @MethodSource
-    void should_return_the_faces_with_specific_numbers_of_occurrences(Roll roll, int occurrences, Set<Face> facesFound) {
-        assertEquals(facesFound, roll.findFacesOccurringAtLeast(occurrences));
+        assertEquals(filteredRoll.toList(), roll.filteredRollForOnly(value).combination().toList());
     }
 
     @ParameterizedTest
@@ -108,12 +129,40 @@ class RollTest {
     @ParameterizedTest
     @MethodSource
     void should_find_all_pairs(Roll roll, Set<Face> pairs) {
-        assertEquals(pairs, roll.findPairs());
+        assertEquals(pairs, roll.findPairs().combination().collect(Collectors.toSet()));
     }
 
     @ParameterizedTest
     @MethodSource
-    void should_find_highest_pair(Roll roll, Face highestPair) {
-        assertEquals(Optional.ofNullable(highestPair), roll.findHighestPair());
+    void should_find_highest_pair(Roll roll,  Set<Face> highestPair) {
+        assertEquals(highestPair, roll.findHighestPair().combination().collect(Collectors.toSet()));
     }
+
+    @ParameterizedTest
+    @MethodSource
+    void should_identify_three_of_a_kind(Roll roll, boolean isThreeOfAKind){
+        assertEquals(!isThreeOfAKind, roll.doesNotHaveThreeOfAKind());
+    }
+    @ParameterizedTest
+    @MethodSource
+    void should_find_three_of_a_kind(Roll roll, Set<Face> threeOfAKind){
+        assertEquals(threeOfAKind, roll.findThreeOfAKind().combination().collect(Collectors.toSet()));
+    }
+    @ParameterizedTest
+    @MethodSource
+    void should_find_four_of_a_kind(Roll roll, Set<Face> fourOfAKind){
+        assertEquals(fourOfAKind, roll.findFourOfAKind().combination().collect(Collectors.toSet()));
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void should_identify_a_pair(Roll roll, boolean isAPair){
+        assertEquals(!isAPair, roll.doesNotHaveAPair());
+    }
+    @ParameterizedTest
+    @MethodSource
+    void should_identify_two_pairs(Roll roll, boolean isTwoPairs){
+        assertEquals(!isTwoPairs, roll.doesNotHaveTwoPairs());
+    }
+
 }

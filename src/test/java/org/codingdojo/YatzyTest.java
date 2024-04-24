@@ -175,7 +175,7 @@ public class YatzyTest {
 
     @Test
     public void large_straight_should_score_0_when_not_a_large_straight() {
-        assertEquals(0, Yatzy.scoreLargeStraight(new Roll(ONE, TWO, TWO, FOUR, FIVE)));
+        assertEquals(0, Yatzy.scoreLargeStraight(new Roll(ONE, TWO, SIX, FOUR, FIVE)));
     }
 
     @Test
