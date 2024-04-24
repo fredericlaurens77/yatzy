@@ -60,9 +60,6 @@ public class Yatzy {
     }
 
     public static int scorePair(Roll roll) {
-        if (roll.doesNotHaveAPair()) {
-            return NULL_SCORE;
-        }
         return roll.findHighestPair().sumFacesWithMultiplier(PAIR_MULTIPLIER);
     }
 
@@ -83,13 +80,10 @@ public class Yatzy {
 
 
     public static int scoreFullHouse(Roll roll) {
-        if (roll.doesNotHaveThreeOfAKind()) {
+        if (roll.doesNotHaveThreeOfAKind() || roll.doesNotHaveTwoPairs())  {
             return NULL_SCORE;
         }
-        int twoPairScore = scoreTwoPairs(roll);
-        if (twoPairScore == NULL_SCORE) {
-            return NULL_SCORE;
-        }
-        return twoPairScore + roll.findThreeOfAKind().sumFacesWithMultiplier(1);
+        return roll.findPairs().sumFacesWithMultiplier(PAIR_MULTIPLIER) +
+        roll.findThreeOfAKind().sumFacesWithMultiplier(1);
     }
 }
