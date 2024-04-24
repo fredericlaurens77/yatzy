@@ -35,7 +35,7 @@ class RollTest {
     public static Stream<Arguments> should_find_highest_pair() {
         return Stream.of(
             Arguments.of(new Roll(ONE, TWO, ONE, ONE, ONE), Set.of(ONE)),
-            Arguments.of(new Roll(ONE, TWO, ONE, TWO, ONE),Set.of(TWO)),
+            Arguments.of(new Roll(ONE, TWO, ONE, TWO, ONE), Set.of(TWO)),
             Arguments.of(new Roll(FIVE, SIX, ONE, FIVE, ONE), Set.of(FIVE)),
             Arguments.of(new Roll(ONE, TWO, FOUR, SIX, FIVE), Collections.EMPTY_SET)
         );
@@ -43,10 +43,10 @@ class RollTest {
 
     public static Stream<Arguments> should_identify_straights() {
         return Stream.of(
-            Arguments.of(new Roll(ONE, TWO, THREE, FOUR, FIVE), true),
-            Arguments.of(new Roll(TWO, THREE, FOUR, FIVE, SIX), true),
-            Arguments.of(new Roll(TWO, SIX, THREE, FOUR, FIVE), true),
-            Arguments.of(new Roll(ONE, ONE, THREE, ONE, ONE), false)
+            Arguments.of(new Roll(ONE, TWO, THREE, FOUR, FIVE), Set.of(ONE, TWO, THREE, FOUR, FIVE)),
+            Arguments.of(new Roll(TWO, THREE, FOUR, FIVE, SIX), Set.of(TWO, THREE, FOUR, FIVE, SIX)),
+            Arguments.of(new Roll(TWO, SIX, THREE, FOUR, FIVE), Set.of(TWO, SIX, THREE, FOUR, FIVE)),
+            Arguments.of(new Roll(ONE, ONE, THREE, ONE, ONE), Collections.EMPTY_SET)
         );
     }
 
@@ -59,10 +59,10 @@ class RollTest {
         );
     }
 
-    public static Stream<Arguments> should_identify_yatzys() {
+    public static Stream<Arguments> should_find_yatzys() {
         return Stream.of(
-            Arguments.of(new Roll(ONE, ONE, ONE, ONE, ONE), true),
-            Arguments.of(new Roll(ONE, ONE, ONE, SIX, ONE), false)
+            Arguments.of(new Roll(ONE, ONE, ONE, ONE, ONE), Set.of(ONE)),
+            Arguments.of(new Roll(ONE, ONE, ONE, SIX, ONE), Collections.EMPTY_SET)
         );
     }
 
@@ -87,13 +87,6 @@ class RollTest {
         );
     }
 
-    public static Stream<Arguments> should_identify_a_pair() {
-        return Stream.of(
-            Arguments.of(new Roll(ONE, TWO, THREE, FOUR, SIX), false),
-            Arguments.of(new Roll(ONE, SIX, ONE, SIX, ONE), true)
-        );
-    }
-
     public static Stream<Arguments> should_identify_three_of_a_kind() {
         return Stream.of(
             Arguments.of(new Roll(ONE, FOUR, FIVE, ONE, SIX), false),
@@ -115,14 +108,14 @@ class RollTest {
 
     @ParameterizedTest
     @MethodSource
-    void should_identify_straights(Roll roll, boolean isStraight) {
-        assertEquals(isStraight, roll.isStraight());
+    void should_identify_straights(Roll roll, Set<Face> straight) {
+        assertEquals(straight, roll.findStraight().combination().collect(Collectors.toSet()));
     }
 
     @ParameterizedTest
     @MethodSource
-    void should_identify_yatzys(Roll roll, boolean isYatzy) {
-        assertEquals(isYatzy, roll.isYatzy());
+    void should_find_yatzys(Roll roll, Set<Face> yatzy) {
+        assertEquals(yatzy, roll.findYatzy().combination().collect(Collectors.toSet()));
     }
 
     @ParameterizedTest
@@ -133,34 +126,32 @@ class RollTest {
 
     @ParameterizedTest
     @MethodSource
-    void should_find_highest_pair(Roll roll,  Set<Face> highestPair) {
+    void should_find_highest_pair(Roll roll, Set<Face> highestPair) {
         assertEquals(highestPair, roll.findHighestPair().combination().collect(Collectors.toSet()));
     }
 
     @ParameterizedTest
     @MethodSource
-    void should_identify_three_of_a_kind(Roll roll, boolean isThreeOfAKind){
+    void should_identify_three_of_a_kind(Roll roll, boolean isThreeOfAKind) {
         assertEquals(!isThreeOfAKind, roll.doesNotHaveThreeOfAKind());
-    }
-    @ParameterizedTest
-    @MethodSource
-    void should_find_three_of_a_kind(Roll roll, Set<Face> threeOfAKind){
-        assertEquals(threeOfAKind, roll.findThreeOfAKind().combination().collect(Collectors.toSet()));
-    }
-    @ParameterizedTest
-    @MethodSource
-    void should_find_four_of_a_kind(Roll roll, Set<Face> fourOfAKind){
-        assertEquals(fourOfAKind, roll.findFourOfAKind().combination().collect(Collectors.toSet()));
     }
 
     @ParameterizedTest
     @MethodSource
-    void should_identify_a_pair(Roll roll, boolean isAPair){
-        assertEquals(!isAPair, roll.doesNotHaveAPair());
+    void should_find_three_of_a_kind(Roll roll, Set<Face> threeOfAKind) {
+        assertEquals(threeOfAKind, roll.findThreeOfAKind().combination().collect(Collectors.toSet()));
     }
+
     @ParameterizedTest
     @MethodSource
-    void should_identify_two_pairs(Roll roll, boolean isTwoPairs){
+    void should_find_four_of_a_kind(Roll roll, Set<Face> fourOfAKind) {
+        assertEquals(fourOfAKind, roll.findFourOfAKind().combination().collect(Collectors.toSet()));
+    }
+
+
+    @ParameterizedTest
+    @MethodSource
+    void should_identify_two_pairs(Roll roll, boolean isTwoPairs) {
         assertEquals(!isTwoPairs, roll.doesNotHaveTwoPairs());
     }
 

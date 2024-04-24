@@ -1,40 +1,36 @@
 package org.codingdojo;
 
 import static org.codingdojo.Face.*;
-import static org.codingdojo.Combination.*;
+import static org.codingdojo.DefaultScorer.*;
 
 public class Yatzy {
 
-    static final int PAIR_MULTIPLIER = 2;
-    static final int THREE_OF_A_KIND_MULTIPLIER = 3;
-    static final int FOUR_OF_A_KIND_MULTIPLIER = 4;
-
     public static int scoreChance(Roll roll) {
-        return roll.fullRoll().sumFaces();
+        return roll.fullRoll().score();
     }
 
     public static int scoreOnes(Roll roll) {
-        return roll.filteredRollForOnly(ONE).sumFaces();
+        return roll.filteredRollForOnly(ONE).score();
     }
 
     public static int scoreTwos(Roll roll) {
-        return roll.filteredRollForOnly(TWO).sumFaces();
+        return roll.filteredRollForOnly(TWO).score();
     }
 
     public static int scoreThrees(Roll roll) {
-        return roll.filteredRollForOnly(THREE).sumFaces();
+        return roll.filteredRollForOnly(THREE).score();
     }
 
     public static int scoreFours(Roll roll) {
-        return roll.filteredRollForOnly(FOUR).sumFaces();
+        return roll.filteredRollForOnly(FOUR).score();
     }
 
     public static int scoreFives(Roll roll) {
-        return roll.filteredRollForOnly(FIVE).sumFaces();
+        return roll.filteredRollForOnly(FIVE).score();
     }
 
     public static int scoreSixes(Roll roll) {
-        return roll.filteredRollForOnly(SIX).sumFaces();
+        return roll.filteredRollForOnly(SIX).score();
     }
 
     public static int scoreSmallStraight(Roll roll) {
@@ -46,36 +42,27 @@ public class Yatzy {
     }
 
     private static int scoreStraight(Roll roll) {
-        if (roll.isStraight()) {
-            return roll.fullRoll().sumFaces();
-        }
-        return NULL_SCORE;
+        return roll.findStraight().score();
     }
 
     public static int scoreYatzy(Roll roll) {
-        if (roll.isYatzy()) {
-            return YATZY_SCORE;
-        }
-        return NULL_SCORE;
+        return roll.findYatzy().score();
     }
 
     public static int scorePair(Roll roll) {
-        return roll.findHighestPair().sumFacesWithMultiplier(PAIR_MULTIPLIER);
+        return roll.findHighestPair().score();
     }
 
     public static int scoreTwoPairs(Roll roll) {
-        if (roll.doesNotHaveTwoPairs()) {
-            return NULL_SCORE;
-        }
-        return roll.findPairs().sumFacesWithMultiplier(PAIR_MULTIPLIER);
+        return roll.findTwoPairs().score();
     }
 
     public static int scoreFourOfAKind(Roll roll) {
-        return roll.findFourOfAKind().sumFacesWithMultiplier(FOUR_OF_A_KIND_MULTIPLIER);
+        return roll.findFourOfAKind().score();
     }
 
     public static int scoreThreeOfAKind(Roll roll) {
-        return roll.findThreeOfAKind().sumFacesWithMultiplier(THREE_OF_A_KIND_MULTIPLIER);
+        return roll.findThreeOfAKind().score();
     }
 
 
@@ -83,7 +70,10 @@ public class Yatzy {
         if (roll.doesNotHaveThreeOfAKind() || roll.doesNotHaveTwoPairs())  {
             return NULL_SCORE;
         }
-        return roll.findPairs().sumFacesWithMultiplier(PAIR_MULTIPLIER) +
-        roll.findThreeOfAKind().sumFacesWithMultiplier(1);
+        return sumPairScoreAndAThirdOfThreeOfAKindScore(roll);
+    }
+
+    private static int sumPairScoreAndAThirdOfThreeOfAKindScore(Roll roll) {
+        return roll.findPairs().score() + (roll.findThreeOfAKind().score() / 3);
     }
 }
