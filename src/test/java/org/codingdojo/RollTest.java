@@ -66,10 +66,10 @@ class RollTest {
         );
     }
 
-    public static Stream<Arguments> should_identify_two_pairs() {
+    public static Stream<Arguments> should_find_full_house() {
         return Stream.of(
-            Arguments.of(new Roll(ONE, ONE, ONE, ONE, ONE), false),
-            Arguments.of(new Roll(ONE, SIX, ONE, SIX, ONE), true)
+            Arguments.of(new Roll(ONE, ONE, ONE, ONE, ONE), Stream.empty()),
+            Arguments.of(new Roll(ONE, SIX, ONE, SIX, ONE), Stream.of(ONE, SIX, ONE, SIX, ONE))
         );
     }
 
@@ -84,13 +84,6 @@ class RollTest {
         return Stream.of(
             Arguments.of(new Roll(ONE, ONE, ONE, FOUR, ONE), Set.of(ONE)),
             Arguments.of(new Roll(ONE, SIX, ONE, SIX, ONE), Collections.EMPTY_SET)
-        );
-    }
-
-    public static Stream<Arguments> should_identify_three_of_a_kind() {
-        return Stream.of(
-            Arguments.of(new Roll(ONE, FOUR, FIVE, ONE, SIX), false),
-            Arguments.of(new Roll(ONE, SIX, ONE, SIX, ONE), true)
         );
     }
 
@@ -132,8 +125,8 @@ class RollTest {
 
     @ParameterizedTest
     @MethodSource
-    void should_identify_three_of_a_kind(Roll roll, boolean isThreeOfAKind) {
-        assertEquals(!isThreeOfAKind, roll.doesNotHaveThreeOfAKind());
+    void should_find_full_house(Roll roll, Stream<Face> fullHouse) {
+        assertEquals(fullHouse.toList(), roll.findFullHouse().combination().toList());
     }
 
     @ParameterizedTest
@@ -147,12 +140,4 @@ class RollTest {
     void should_find_four_of_a_kind(Roll roll, Set<Face> fourOfAKind) {
         assertEquals(fourOfAKind, roll.findFourOfAKind().combination().collect(Collectors.toSet()));
     }
-
-
-    @ParameterizedTest
-    @MethodSource
-    void should_identify_two_pairs(Roll roll, boolean isTwoPairs) {
-        assertEquals(!isTwoPairs, roll.doesNotHaveTwoPairs());
-    }
-
 }

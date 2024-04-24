@@ -1,4 +1,6 @@
-package org.codingdojo;
+package org.codingdojo.scorer;
+
+import org.codingdojo.Face;
 
 import java.util.stream.Stream;
 

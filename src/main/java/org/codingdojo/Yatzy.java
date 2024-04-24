@@ -1,7 +1,6 @@
 package org.codingdojo;
 
 import static org.codingdojo.Face.*;
-import static org.codingdojo.DefaultScorer.*;
 
 public class Yatzy {
 
@@ -67,13 +66,6 @@ public class Yatzy {
 
 
     public static int scoreFullHouse(Roll roll) {
-        if (roll.doesNotHaveThreeOfAKind() || roll.doesNotHaveTwoPairs())  {
-            return NULL_SCORE;
-        }
-        return sumPairScoreAndAThirdOfThreeOfAKindScore(roll);
-    }
-
-    private static int sumPairScoreAndAThirdOfThreeOfAKindScore(Roll roll) {
-        return roll.findPairs().score() + (roll.findThreeOfAKind().score() / 3);
+        return roll.findFullHouse().score();
     }
 }

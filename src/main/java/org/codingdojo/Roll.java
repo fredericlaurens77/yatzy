@@ -1,5 +1,9 @@
 package org.codingdojo;
 
+import org.codingdojo.scorer.DefaultScorer;
+import org.codingdojo.scorer.Scorer;
+import org.codingdojo.scorer.YatzyScorer;
+
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Set;
@@ -26,18 +30,18 @@ public record Roll(Face dice1, Face dice2, Face dice3, Face dice4, Face dice5) {
             && (fullRoll().score() == 15 || fullRoll().score() == 20);
     }
 
-    public Scorer findStraight(){
-        if(isStraight()){
+    public Scorer findStraight() {
+        if (isStraight()) {
             return fullRoll();
         }
         return new DefaultScorer(Stream.empty());
     }
 
-    public boolean doesNotHaveThreeOfAKind(){
+    private boolean doesNotHaveThreeOfAKind() {
         return findFacesOccurringAtLeast(3).isEmpty();
     }
 
-    public boolean doesNotHaveTwoPairs(){
+    private boolean doesNotHaveTwoPairs() {
         return findFacesOccurringAtLeast(2).size() != 2;
     }
 
@@ -50,17 +54,24 @@ public record Roll(Face dice1, Face dice2, Face dice3, Face dice4, Face dice5) {
     }
 
     public Scorer findTwoPairs() {
-        if(doesNotHaveTwoPairs()){
+        if (doesNotHaveTwoPairs()) {
             return new DefaultScorer(Stream.empty());
         }
         return new DefaultScorer(findFacesOccurringAtLeast(2).stream(), PAIR_MULTIPLIER);
     }
 
-    public Scorer findThreeOfAKind(){
+    public Scorer findFullHouse() {
+        if (doesNotHaveThreeOfAKind() || doesNotHaveTwoPairs()) {
+            return new DefaultScorer(Stream.empty());
+        }
+        return fullRoll();
+    }
+
+    public Scorer findThreeOfAKind() {
         return new DefaultScorer(findFacesOccurringAtLeast(3).stream(), THREE_OF_A_KIND_MULTIPLIER);
     }
 
-    public Scorer findFourOfAKind(){
+    public Scorer findFourOfAKind() {
         return new DefaultScorer(findFacesOccurringAtLeast(4).stream(), FOUR_OF_A_KIND_MULTIPLIER);
     }
 
