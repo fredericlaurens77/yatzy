@@ -1,44 +1,42 @@
 package org.codingdojo;
 
 import java.util.Set;
-import java.util.stream.Stream;
 
 import static org.codingdojo.Face.*;
+import static org.codingdojo.Scorer.*;
 
 public class Yatzy {
 
-    private static final int NULL_SCORE = 0;
-
-    private static int sum(Stream<Face> roll) {
-        return roll.map(Face::intValue).reduce(0, Integer::sum);
-    }
+    static final int PAIR_MULTIPLIER = 2;
+    static final int THREE_OF_A_KIND_MULTIPLIER = 3;
+    static final int FOUR_OF_A_KIND_MULTIPLIER = 4;
 
     public static int scoreChance(Roll roll) {
-        return sum(roll.fullRoll());
+        return sumFaces(roll.fullRoll());
     }
 
     public static int scoreOnes(Roll roll) {
-        return sum(roll.rollOf(ONE));
+        return sumFaces(roll.filteredRollForOnly(ONE));
     }
 
     public static int scoreTwos(Roll roll) {
-        return sum(roll.rollOf(TWO));
+        return sumFaces(roll.filteredRollForOnly(TWO));
     }
 
     public static int scoreThrees(Roll roll) {
-        return sum(roll.rollOf(THREE));
+        return sumFaces(roll.filteredRollForOnly(THREE));
     }
 
     public static int scoreFours(Roll roll) {
-        return sum(roll.rollOf(FOUR));
+        return sumFaces(roll.filteredRollForOnly(FOUR));
     }
 
     public static int scoreFives(Roll roll) {
-        return sum(roll.rollOf(FIVE));
+        return sumFaces(roll.filteredRollForOnly(FIVE));
     }
 
     public static int scoreSixes(Roll roll) {
-        return sum(roll.rollOf(SIX));
+        return sumFaces(roll.filteredRollForOnly(SIX));
     }
 
     public static int scoreSmallStraight(Roll roll) {
@@ -51,55 +49,46 @@ public class Yatzy {
 
     private static int scoreStraight(Roll roll) {
         if (roll.isStraight()) {
-            return sum(roll.fullRoll());
+            return sumFaces(roll.fullRoll());
         }
         return NULL_SCORE;
     }
 
     public static int scoreYatzy(Roll roll) {
         if (roll.isYatzy()) {
-            return 50;
+            return YATZY_SCORE;
         }
         return NULL_SCORE;
     }
 
     public static int scorePair(Roll roll) {
-        if (roll.pairs().isEmpty()) {
+        if (roll.findPairs().isEmpty()) {
             return NULL_SCORE;
         }
-        return roll.highestPair()
-            .stream()
-            .findFirst()
-            .map(it -> it.intValue() * 2)
-            .orElse(NULL_SCORE);
+        return sumFacesWithMultiplier(roll.findHighestPair().stream(), PAIR_MULTIPLIER);
     }
 
     public static int scoreTwoPairs(Roll roll) {
-        Set<Face> pairs = roll.pairs();
-        if (pairs.size() != 2) {
+        Set<Face> allPairs = roll.findPairs();
+        if (allPairs.size() != 2) {
             return NULL_SCORE;
         }
-        return sum(pairs.stream()) * 2;
+        return sumFacesWithMultiplier(allPairs.stream(), PAIR_MULTIPLIER);
     }
 
     public static int scoreFourOfAKind(Roll roll) {
-        return findGroupOfAGivenNumberOfOccurrencesAndSum(roll, 4);
+        Set<Face> facesFound = roll.findFourOfAKind();
+        return sumFacesWithMultiplier(facesFound.stream(), FOUR_OF_A_KIND_MULTIPLIER);
     }
 
     public static int scoreThreeOfAKind(Roll roll) {
-        return findGroupOfAGivenNumberOfOccurrencesAndSum(roll, 3);
+        Set<Face> facesFound = roll.findThreeOfAKind();
+        return sumFacesWithMultiplier(facesFound.stream(), THREE_OF_A_KIND_MULTIPLIER);
     }
 
-    private static int findGroupOfAGivenNumberOfOccurrencesAndSum(Roll roll, int times) {
-        Set<Face> facesFound = roll.facesOccurringAtLeast(times);
-        return facesFound.stream()
-            .findFirst()
-            .map(face -> face.intValue() * times)
-            .orElse(NULL_SCORE);
-    }
 
     public static int scoreFullHouse(Roll roll) {
-        if (roll.facesOccurringAtLeast(3).isEmpty()) {
+        if (roll.doesNotHaveThreeOfAKind()) {
             return NULL_SCORE;
         }
         int twoPairScore = scoreTwoPairs(roll);
@@ -107,6 +96,6 @@ public class Yatzy {
             return NULL_SCORE;
         }
         return twoPairScore +
-            roll.facesOccurringAtLeast(3).stream().findFirst().map(Face::intValue).orElse(NULL_SCORE);
+            sumFacesWithMultiplier(roll.findThreeOfAKind().stream(), 1);
     }
 }

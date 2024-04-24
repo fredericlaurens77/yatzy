@@ -14,29 +14,41 @@ public record Roll(Face dice1, Face dice2, Face dice3, Face dice4, Face dice5) {
         return Stream.of(dice1, dice2, dice3, dice4, dice5);
     }
 
-    public Stream<Face> rollOf(Face face) {
+    public Stream<Face> filteredRollForOnly(Face face) {
         return fullRoll().filter(it -> it == face);
     }
 
     public boolean isStraight() {
-        return facesOccurringAtLeast(1).size() == 5;
+        return findFacesOccurringAtLeast(1).size() == 5;
+    }
+
+    public boolean doesNotHaveThreeOfAKind(){
+        return findFacesOccurringAtLeast(3).isEmpty();
     }
 
     public boolean isYatzy() {
-        return facesOccurringAtLeast(5).size() == 1;
+        return findFacesOccurringAtLeast(5).size() == 1;
     }
 
-    public Set<Face> pairs() {
-        return facesOccurringAtLeast(2);
+    public Set<Face> findPairs() {
+        return findFacesOccurringAtLeast(2);
     }
 
-    public Optional<Face> highestPair() {
-        return pairs()
+    public Set<Face> findThreeOfAKind(){
+        return findFacesOccurringAtLeast(3);
+    }
+
+    public Set<Face> findFourOfAKind(){
+        return findFacesOccurringAtLeast(4);
+    }
+
+    public Optional<Face> findHighestPair() {
+        return findPairs()
             .stream()
             .max(Comparator.comparing(Face::intValue));
     }
 
-    public Set<Face> facesOccurringAtLeast(int times) {
+    public Set<Face> findFacesOccurringAtLeast(int times) {
         return countFaceOccurrences()
             .entrySet()
             .stream()

@@ -84,13 +84,13 @@ class RollTest {
     @ParameterizedTest
     @MethodSource
     void should_return_the_roll_filtered_for_specific_face_values(Roll roll, Face value, Stream<Face> filteredRoll) {
-        assertEquals(filteredRoll.toList(), roll.rollOf(value).toList());
+        assertEquals(filteredRoll.toList(), roll.filteredRollForOnly(value).toList());
     }
 
     @ParameterizedTest
     @MethodSource
     void should_return_the_faces_with_specific_numbers_of_occurrences(Roll roll, int occurrences, Set<Face> facesFound) {
-        assertEquals(facesFound, roll.facesOccurringAtLeast(occurrences));
+        assertEquals(facesFound, roll.findFacesOccurringAtLeast(occurrences));
     }
 
     @ParameterizedTest
@@ -108,12 +108,12 @@ class RollTest {
     @ParameterizedTest
     @MethodSource
     void should_find_all_pairs(Roll roll, Set<Face> pairs) {
-        assertEquals(pairs, roll.pairs());
+        assertEquals(pairs, roll.findPairs());
     }
 
     @ParameterizedTest
     @MethodSource
     void should_find_highest_pair(Roll roll, Face highestPair) {
-        assertEquals(Optional.ofNullable(highestPair), roll.highestPair());
+        assertEquals(Optional.ofNullable(highestPair), roll.findHighestPair());
     }
 }
