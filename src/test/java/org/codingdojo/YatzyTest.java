@@ -1,193 +1,313 @@
 package org.codingdojo;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
 
 import static org.codingdojo.Face.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class YatzyTest {
 
-    @Test
-    public void chance_score_should_be_the_sum_of_all_dice() {
-        assertEquals(15, Yatzy.scoreChance(new Roll(TWO, THREE, FOUR, FIVE, ONE)));
-        assertEquals(16, Yatzy.scoreChance(new Roll(THREE, THREE, FOUR, FIVE, ONE)));
-        assertEquals(14, Yatzy.scoreChance(new Roll(ONE, ONE, THREE, THREE, SIX)));
-        assertEquals(21, Yatzy.scoreChance(new Roll(FOUR, FIVE, FIVE, SIX, ONE)));
+    public static Stream<Arguments> chance_score_should_be_the_sum_of_all_dice() {
+        return Stream.of(
+            Arguments.of(new Roll(TWO, THREE, FOUR, FIVE, ONE), 15),
+            Arguments.of(new Roll(THREE, THREE, FOUR, FIVE, ONE), 16),
+            Arguments.of(new Roll(ONE, ONE, THREE, THREE, SIX), 14),
+            Arguments.of(new Roll(FOUR, FIVE, FIVE, SIX, ONE), 21)
+        );
+    }
+
+    public static Stream<Arguments> yatzy_score_should_be_50() {
+        return Stream.of(
+            Arguments.of(new Roll(FOUR, FOUR, FOUR, FOUR, FOUR)),
+            Arguments.of(new Roll(SIX, SIX, SIX, SIX, SIX)),
+            Arguments.of(new Roll(ONE, ONE, ONE, ONE, ONE))
+        );
+    }
+
+    public static Stream<Arguments> yatzy_score_should_be_0_when_not_a_yatzy() {
+        return Stream.of(
+            Arguments.of(new Roll(SIX, SIX, SIX, SIX, THREE)),
+            Arguments.of(new Roll(ONE, ONE, ONE, TWO, ONE))
+        );
+    }
+
+    public static Stream<Arguments> ones_score_should_be_the_sum_of_ones() {
+        return Stream.of(
+            Arguments.of(new Roll(ONE, TWO, THREE, FOUR, FIVE), 1),
+            Arguments.of(new Roll(ONE, TWO, ONE, FOUR, FIVE), 2),
+            Arguments.of(new Roll(SIX, TWO, TWO, FOUR, FIVE), 0),
+            Arguments.of(new Roll(ONE, TWO, ONE, ONE, ONE), 4),
+            Arguments.of(new Roll(THREE, THREE, THREE, FOUR, FIVE), 0)
+        );
+    }
+
+    public static Stream<Arguments> twos_score_should_be_the_sum_of_twos() {
+        return Stream.of(
+            Arguments.of(new Roll(ONE, TWO, THREE, TWO, SIX), 4),
+            Arguments.of(new Roll(TWO, TWO, TWO, TWO, TWO), 10),
+            Arguments.of(new Roll(SIX, THREE, SIX, FIVE, ONE), 0)
+        );
+    }
+
+    public static Stream<Arguments> threes_score_should_be_the_sum_of_threes() {
+        return Stream.of(
+            Arguments.of(new Roll(ONE, TWO, TWO, TWO, SIX), 0),
+            Arguments.of(new Roll(ONE, TWO, THREE, TWO, THREE), 6),
+            Arguments.of(new Roll(TWO, THREE, THREE, THREE, THREE), 12)
+        );
+    }
+
+    public static Stream<Arguments> fours_score_should_be_the_sum_of_fours() {
+        return Stream.of(
+            Arguments.of(new Roll(FIVE, FIVE, FIVE, FIVE, FIVE), 0),
+            Arguments.of(new Roll(FOUR, FOUR, FOUR, FIVE, FIVE), 12),
+            Arguments.of(new Roll(FOUR, FOUR, FIVE, FIVE, FIVE), 8),
+            Arguments.of(new Roll(FOUR, FIVE, FIVE, FIVE, FIVE), 4),
+            Arguments.of(new Roll(ONE, ONE, TWO, FOUR, FOUR), 8)
+        );
+    }
+
+    public static Stream<Arguments> fives_score_should_be_the_sum_of_fives() {
+        return Stream.of(
+            Arguments.of(new Roll(FOUR, FOUR, FOUR, SIX, SIX), 0),
+            Arguments.of(new Roll(FOUR, FOUR, FOUR, FIVE, FIVE), 10),
+            Arguments.of(new Roll(FOUR, FOUR, FIVE, FIVE, FIVE), 15),
+            Arguments.of(new Roll(FOUR, FIVE, FIVE, FIVE, FIVE), 20)
+        );
+    }
+
+    public static Stream<Arguments> sixes_score_should_be_the_sum_of_sixes() {
+        return Stream.of(
+            Arguments.of(new Roll(FOUR, FOUR, FOUR, FIVE, FIVE), 0),
+            Arguments.of(new Roll(FOUR, FOUR, SIX, FIVE, FIVE), 6),
+            Arguments.of(new Roll(SIX, FIVE, SIX, SIX, FIVE), 18)
+        );
+    }
+
+    public static Stream<Arguments> one_pair_score_should_be_the_sum_of_highest_pair() {
+        return Stream.of(
+            Arguments.of(new Roll(THREE, FOUR, THREE, FIVE, SIX), 6),
+            Arguments.of(new Roll(FIVE, THREE, THREE, THREE, FIVE), 10),
+            Arguments.of(new Roll(FIVE, THREE, SIX, SIX, FIVE), 12),
+            Arguments.of(new Roll(THREE, THREE, THREE, FOUR, FOUR), 8),
+            Arguments.of(new Roll(ONE, ONE, SIX, TWO, SIX), 12),
+            Arguments.of(new Roll(THREE, THREE, THREE, FOUR, ONE), 6),
+            Arguments.of(new Roll(THREE, THREE, THREE, THREE, ONE), 6)
+        );
+    }
+
+    public static Stream<Arguments> two_pair_score_should_be_the_sum_of_the_two_pairs() {
+        return Stream.of(
+            Arguments.of(new Roll(THREE, THREE, FIVE, FOUR, FIVE), 16),
+            Arguments.of(new Roll(ONE, ONE, TWO, THREE, THREE), 8)
+        );
+    }
+
+    public static Stream<Arguments> two_pair_score_should_be_ignore_a_third_occurrence() {
+        return Stream.of(
+            Arguments.of(new Roll(THREE, THREE, FIVE, FIVE, FIVE), 16),
+            Arguments.of(new Roll(ONE, ONE, TWO, TWO, TWO), 6)
+        );
+    }
+
+    public static Stream<Arguments> three_of_a_kind_score_should_be_the_sum() {
+        return Stream.of(
+            Arguments.of(new Roll(THREE, THREE, THREE, FOUR, FIVE), 9),
+            Arguments.of(new Roll(FIVE, THREE, FIVE, FOUR, FIVE), 15)
+        );
+    }
+
+    public static Stream<Arguments> four_of_a_kind_score_should_be_the_sum() {
+        return Stream.of(
+            Arguments.of(new Roll(THREE, THREE, THREE, THREE, FIVE), 12),
+            Arguments.of(new Roll(FIVE, FIVE, FIVE, FOUR, FIVE), 20)
+        );
+    }
+
+    public static Stream<Arguments> full_house_should_score_sum_of_two_groups() {
+        return Stream.of(
+            Arguments.of(new Roll(SIX, TWO, TWO, TWO, SIX), 18),
+            Arguments.of(new Roll(ONE, ONE, TWO, TWO, TWO), 8)
+        );
+    }
+
+    public static Stream<Arguments> full_house_should_score_0_when_not_a_full_house() {
+        return Stream.of(
+            Arguments.of(new Roll(TWO, THREE, FOUR, FIVE, SIX)),
+            Arguments.of(new Roll(TWO, TWO, THREE, THREE, FOUR)),
+            Arguments.of(new Roll(FOUR, FOUR, FOUR, FOUR, FOUR))
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void chance_score_should_be_the_sum_of_all_dice(Roll roll, int score) {
+        assertEquals(score, Yatzy.scoreChance(roll));
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void yatzy_score_should_be_50(Roll roll) {
+        assertEquals(50, Yatzy.scoreYatzy(roll));
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void yatzy_score_should_be_0_when_not_a_yatzy(Roll roll) {
+        assertEquals(0, Yatzy.scoreYatzy(roll));
+    }
+
+
+    @ParameterizedTest
+    @MethodSource
+    void ones_score_should_be_the_sum_of_ones(Roll roll, int score) {
+        assertEquals(score, Yatzy.scoreOnes(roll));
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void twos_score_should_be_the_sum_of_twos(Roll roll, int score) {
+        assertEquals(score, Yatzy.scoreTwos(roll));
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void threes_score_should_be_the_sum_of_threes(Roll roll, int score) {
+        assertEquals(score, Yatzy.scoreThrees(roll));
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void fours_score_should_be_the_sum_of_fours(Roll roll, int score) {
+        assertEquals(score, Yatzy.scoreFours(roll));
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void fives_score_should_be_the_sum_of_fives(Roll roll, int score) {
+        assertEquals(score, Yatzy.scoreFives(roll));
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void sixes_score_should_be_the_sum_of_sixes(Roll roll, int score) {
+        assertEquals(score, Yatzy.scoreSixes(roll));
     }
 
     @Test
-    public void yatzy_score_should_be_50() {
-        assertEquals(50, Yatzy.scoreYatzy(new Roll(FOUR, FOUR, FOUR, FOUR, FOUR)));
-        assertEquals(50, Yatzy.scoreYatzy(new Roll(SIX, SIX, SIX, SIX, SIX)));
-        assertEquals(50, Yatzy.scoreYatzy(new Roll(ONE, ONE, ONE, ONE, ONE)));
-    }
-
-    @Test
-    public void yatzy_score_should_be_0_when_not_a_yatzy() {
-        assertEquals(0, Yatzy.scoreYatzy(new Roll(SIX, SIX, SIX, SIX, THREE)));
-        assertEquals(0, Yatzy.scoreYatzy(new Roll(ONE, ONE, ONE, TWO, ONE)));
-    }
-
-
-    @Test
-    public void ones_score_should_be_the_sum_of_ones() {
-        assertEquals(1, Yatzy.scoreOnes(new Roll(ONE, TWO, THREE, FOUR, FIVE)));
-        assertEquals(2, Yatzy.scoreOnes(new Roll(ONE, TWO, ONE, FOUR, FIVE)));
-        assertEquals(0, Yatzy.scoreOnes(new Roll(SIX, TWO, TWO, FOUR, FIVE)));
-        assertEquals(4, Yatzy.scoreOnes(new Roll(ONE, TWO, ONE, ONE, ONE)));
-        assertEquals(0, Yatzy.scoreOnes(new Roll(THREE, THREE, THREE, FOUR, FIVE)));
-    }
-
-    @Test
-    public void twos_score_should_be_the_sum_of_twos() {
-        assertEquals(4, Yatzy.scoreTwos(new Roll(ONE, TWO, THREE, TWO, SIX)));
-        assertEquals(10, Yatzy.scoreTwos(new Roll(TWO, TWO, TWO, TWO, TWO)));
-        assertEquals(4, Yatzy.scoreTwos(new Roll(TWO, THREE, TWO, FIVE, ONE)));
-    }
-
-    @Test
-    public void threes_score_should_be_the_sum_of_threes() {
-        assertEquals(6, Yatzy.scoreThrees(new Roll(ONE, TWO, THREE, TWO, THREE)));
-        assertEquals(12, Yatzy.scoreThrees(new Roll(TWO, THREE, THREE, THREE, THREE)));
-    }
-
-    @Test
-    public void fours_score_should_be_the_sum_of_fours() {
-        assertEquals(12, Yatzy.scoreFours(new Roll(FOUR, FOUR, FOUR, FIVE, FIVE)));
-        assertEquals(8, Yatzy.scoreFours(new Roll(FOUR, FOUR, FIVE, FIVE, FIVE)));
-        assertEquals(4, Yatzy.scoreFours(new Roll(FOUR, FIVE, FIVE, FIVE, FIVE)));
-        assertEquals(8, Yatzy.scoreFours(new Roll(ONE, ONE, TWO, FOUR, FOUR)));
-    }
-
-    @Test
-    public void fives_score_should_be_the_sum_of_fives() {
-        assertEquals(10, Yatzy.scoreFives(new Roll(FOUR, FOUR, FOUR, FIVE, FIVE)));
-        assertEquals(15, Yatzy.scoreFives(new Roll(FOUR, FOUR, FIVE, FIVE, FIVE)));
-        assertEquals(20, Yatzy.scoreFives(new Roll(FOUR, FIVE, FIVE, FIVE, FIVE)));
-    }
-
-    @Test
-    public void sixes_score_should_be_the_sum_of_sixes() {
-        assertEquals(0, Yatzy.scoreSixes(new Roll(FOUR, FOUR, FOUR, FIVE, FIVE)));
-        assertEquals(6, Yatzy.scoreSixes(new Roll(FOUR, FOUR, SIX, FIVE, FIVE)));
-        assertEquals(18, Yatzy.scoreSixes(new Roll(SIX, FIVE, SIX, SIX, FIVE)));
-    }
-
-    @Test
-    public void one_pair_score_should_be_zero_when_there_is_no_pair() {
+    void one_pair_score_should_be_zero_when_there_is_no_pair() {
         assertEquals(0, Yatzy.scorePair(new Roll(ONE, TWO, THREE, FOUR, FIVE)));
     }
 
-    @Test
-    public void one_pair_score_should_be_the_sum_of_highest_pair() {
-        assertEquals(6, Yatzy.scorePair(new Roll(THREE, FOUR, THREE, FIVE, SIX)));
-        assertEquals(10, Yatzy.scorePair(new Roll(FIVE, THREE, THREE, THREE, FIVE)));
-        assertEquals(12, Yatzy.scorePair(new Roll(FIVE, THREE, SIX, SIX, FIVE)));
-        assertEquals(8, Yatzy.scorePair(new Roll(THREE, THREE, THREE, FOUR, FOUR)));
-        assertEquals(12, Yatzy.scorePair(new Roll(ONE, ONE, SIX, TWO, SIX)));
-        assertEquals(6, Yatzy.scorePair(new Roll(THREE, THREE, THREE, FOUR, ONE)));
-        assertEquals(6, Yatzy.scorePair(new Roll(THREE, THREE, THREE, THREE, ONE)));
+    @ParameterizedTest
+    @MethodSource
+    void one_pair_score_should_be_the_sum_of_highest_pair(Roll roll, int score) {
+        assertEquals(score, Yatzy.scorePair(roll));
     }
 
     @Test
-    public void two_pair_score_should_be_zero_when_there_is_only_one_pair() {
+    void two_pair_score_should_be_zero_when_there_is_only_one_pair() {
         assertEquals(0, Yatzy.scoreTwoPairs(new Roll(ONE, ONE, TWO, THREE, FOUR)));
     }
 
     @Test
-    public void two_pair_score_should_be_zero_when_it_is_a_four_of_a_kind() {
+    void two_pair_score_should_be_zero_when_it_is_a_four_of_a_kind() {
         assertEquals(0, Yatzy.scoreTwoPairs(new Roll(THREE, THREE, THREE, THREE, ONE)));
     }
 
-    @Test
-    public void two_pair_score_should_be_the_sum_of_the_two_pairs() {
-        assertEquals(16, Yatzy.scoreTwoPairs(new Roll(THREE, THREE, FIVE, FOUR, FIVE)));
-        assertEquals(8, Yatzy.scoreTwoPairs(new Roll(ONE, ONE, TWO, THREE, THREE)));
+    @ParameterizedTest
+    @MethodSource
+    void two_pair_score_should_be_the_sum_of_the_two_pairs(Roll roll, int score) {
+        assertEquals(score, Yatzy.scoreTwoPairs(roll));
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void two_pair_score_should_be_ignore_a_third_occurrence(Roll roll, int score) {
+        assertEquals(score, Yatzy.scoreTwoPairs(roll));
     }
 
     @Test
-    public void two_pair_score_should_be_ignore_a_third_occurrence() {
-        assertEquals(16, Yatzy.scoreTwoPairs(new Roll(THREE, THREE, FIVE, FIVE, FIVE)));
-        assertEquals(6, Yatzy.scoreTwoPairs(new Roll(ONE, ONE, TWO, TWO, TWO)));
-    }
-
-    @Test
-    public void three_of_a_kind_score_should_be_zero() {
+    void three_of_a_kind_score_should_be_zero() {
         assertEquals(0, Yatzy.scoreThreeOfAKind(new Roll(THREE, THREE, FOUR, FIVE, SIX)));
     }
 
-    @Test
-    public void three_of_a_kind_score_should_be_the_sum() {
-        assertEquals(9, Yatzy.scoreThreeOfAKind(new Roll(THREE, THREE, THREE, FOUR, FIVE)));
-        assertEquals(15, Yatzy.scoreThreeOfAKind(new Roll(FIVE, THREE, FIVE, FOUR, FIVE)));
+    @ParameterizedTest
+    @MethodSource
+    void three_of_a_kind_score_should_be_the_sum(Roll roll, int score) {
+        assertEquals(score, Yatzy.scoreThreeOfAKind(roll));
     }
 
     @Test
-    public void three_of_a_kind_score_should_ignore_a_fourth_occurrence() {
+    void three_of_a_kind_score_should_ignore_a_fourth_occurrence() {
         assertEquals(9, Yatzy.scoreThreeOfAKind(new Roll(THREE, THREE, THREE, THREE, ONE)));
     }
 
     @Test
-    public void three_of_a_kind_score_should_ignore_a_fourth_and_fifth_occurrence() {
+    void three_of_a_kind_score_should_ignore_a_fourth_and_fifth_occurrence() {
         assertEquals(9, Yatzy.scoreThreeOfAKind(new Roll(THREE, THREE, THREE, THREE, THREE)));
     }
 
     @Test
-    public void four_of_a_kind_score_should_be_zero() {
+    void four_of_a_kind_score_should_be_zero() {
         assertEquals(0, Yatzy.scoreFourOfAKind(new Roll(TWO, TWO, TWO, FIVE, FIVE)));
     }
 
-    @Test
-    public void four_of_a_kind_score_should_be_the_sum() {
-        assertEquals(12, Yatzy.scoreFourOfAKind(new Roll(THREE, THREE, THREE, THREE, FIVE)));
-        assertEquals(20, Yatzy.scoreFourOfAKind(new Roll(FIVE, FIVE, FIVE, FOUR, FIVE)));
+    @ParameterizedTest
+    @MethodSource
+    void four_of_a_kind_score_should_be_the_sum(Roll roll, int score) {
+        assertEquals(score, Yatzy.scoreFourOfAKind(roll));
     }
 
     @Test
-    public void four_of_a_kind_score_should_ignore_a_fifth_occurrence() {
+    void four_of_a_kind_score_should_ignore_a_fifth_occurrence() {
         assertEquals(8, Yatzy.scoreFourOfAKind(new Roll(TWO, TWO, TWO, TWO, TWO)));
     }
 
     @Test
-    public void small_straight_should_score_15_in_order() {
+    void small_straight_should_score_15_in_order() {
         assertEquals(15, Yatzy.scoreSmallStraight(new Roll(ONE, TWO, THREE, FOUR, FIVE)));
     }
 
     @Test
-    public void small_straight_should_score_15_in_disorder() {
+    void small_straight_should_score_15_in_disorder() {
         assertEquals(15, Yatzy.scoreSmallStraight(new Roll(TWO, THREE, FOUR, FIVE, ONE)));
     }
 
     @Test
-    public void small_straight_should_score_0_when_not_a_small_straight() {
+    void small_straight_should_score_0_when_not_a_small_straight() {
         assertEquals(0, Yatzy.scoreSmallStraight(new Roll(ONE, TWO, SIX, FOUR, FIVE)));
     }
 
     @Test
-    public void large_straight_should_score_20_in_order() {
+    void large_straight_should_score_20_in_order() {
         assertEquals(20, Yatzy.scoreLargeStraight(new Roll(TWO, THREE, FOUR, FIVE, SIX)));
     }
 
     @Test
-    public void large_straight_should_score_20_in_disorder() {
+    void large_straight_should_score_20_in_disorder() {
         assertEquals(20, Yatzy.scoreLargeStraight(new Roll(SIX, TWO, THREE, FOUR, FIVE)));
     }
 
     @Test
-    public void large_straight_should_score_0_when_not_a_large_straight() {
+    void large_straight_should_score_0_when_not_a_large_straight() {
         assertEquals(0, Yatzy.scoreLargeStraight(new Roll(ONE, TWO, SIX, FOUR, FIVE)));
     }
 
-    @Test
-    public void full_house_should_score_sum_of_two_groups() {
-        assertEquals(18, Yatzy.scoreFullHouse(new Roll(SIX, TWO, TWO, TWO, SIX)));
-        assertEquals(8, Yatzy.scoreFullHouse(new Roll(ONE, ONE, TWO, TWO, TWO)));
+    @ParameterizedTest
+    @MethodSource
+    void full_house_should_score_sum_of_two_groups(Roll roll, int score) {
+        assertEquals(score, Yatzy.scoreFullHouse(roll));
     }
 
-    @Test
-    public void full_house_should_score_0_when_not_a_full_house() {
-        assertEquals(0, Yatzy.scoreFullHouse(new Roll(TWO, THREE, FOUR, FIVE, SIX)));
-        assertEquals(0, Yatzy.scoreFullHouse(new Roll(TWO, TWO, THREE, THREE, FOUR)));
-        assertEquals(0, Yatzy.scoreFullHouse(new Roll(FOUR, FOUR, FOUR, FOUR, FOUR)));
+    @ParameterizedTest
+    @MethodSource
+    void full_house_should_score_0_when_not_a_full_house(Roll roll) {
+        assertEquals(0, Yatzy.scoreFullHouse(roll));
     }
 }

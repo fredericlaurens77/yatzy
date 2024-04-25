@@ -4,6 +4,7 @@ import static org.codingdojo.Face.*;
 
 public class Yatzy {
 
+    private Yatzy(){}
     public static int scoreChance(Roll roll) {
         return roll.fullRoll().score();
     }
@@ -63,7 +64,6 @@ public class Yatzy {
     public static int scoreThreeOfAKind(Roll roll) {
         return roll.findThreeOfAKind().score();
     }
-
 
     public static int scoreFullHouse(Roll roll) {
         return roll.findFullHouse().score();

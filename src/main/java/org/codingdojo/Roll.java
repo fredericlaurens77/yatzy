@@ -25,24 +25,11 @@ public record Roll(Face dice1, Face dice2, Face dice3, Face dice4, Face dice5) {
         return new DefaultScorer(Stream.of(dice1, dice2, dice3, dice4, dice5).filter(it -> it == face));
     }
 
-    private boolean isStraight() {
-        return findFacesOccurringAtLeast(1).size() == 5
-            && (fullRoll().score() == 15 || fullRoll().score() == 20);
-    }
-
     public Scorer findStraight() {
         if (isStraight()) {
             return fullRoll();
         }
         return new DefaultScorer(Stream.empty());
-    }
-
-    private boolean doesNotHaveThreeOfAKind() {
-        return findFacesOccurringAtLeast(3).isEmpty();
-    }
-
-    private boolean doesNotHaveTwoPairs() {
-        return findFacesOccurringAtLeast(2).size() != 2;
     }
 
     public Scorer findYatzy() {
@@ -93,5 +80,18 @@ public record Roll(Face dice1, Face dice2, Face dice3, Face dice4, Face dice5) {
     private Map<Face, Long> countFaceOccurrences() {
         return Stream.of(dice1, dice2, dice3, dice4, dice5)
             .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+    }
+
+    private boolean doesNotHaveThreeOfAKind() {
+        return findFacesOccurringAtLeast(3).isEmpty();
+    }
+
+    private boolean doesNotHaveTwoPairs() {
+        return findFacesOccurringAtLeast(2).size() != 2;
+    }
+
+    private boolean isStraight() {
+        return findFacesOccurringAtLeast(1).size() == 5
+            && (fullRoll().score() == 15 || fullRoll().score() == 20);
     }
 }
